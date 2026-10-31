@@ -17,9 +17,9 @@ Sieben Listen und der Trainer. Die drei Wortlisten sind dreistufig geordnet: **B
 | Gefühle unerfüllt | 75 Wörter, 11 Töpfe, 5 Bereiche | Was ich fühle, wenn ein Bedürfnis nicht erfüllt ist |
 | Gefühle erfüllt | 75 Wörter, 13 Töpfe, 5 Bereiche | Was ich fühle, wenn eines erfüllt ist |
 | Bedürfnisse | 96 Wörter, 17 Töpfe, 5 Bereiche | Das, worum es unter dem Gefühl geht |
-| EN unerfüllt / erfüllt / Bedürfnisse | 87 / 80 / 79 Einträge | Rosenbergs englische Listen, auf die deutschen verlinkt |
+| EN unerfüllt / erfüllt / Bedürfnisse | 75 / 75 / 96 Einträge | Jedes Wort mit seiner englischen Übersetzung, in denselben Töpfen |
 | Umschreiben | 288 Fragen zu 96 Bedürfnissen | Nach einem Bedürfnis fragen, ohne das Wort zu benutzen |
-| ▶ Trainer | 8 Decks | Lernkarten mit Spaced Repetition |
+| ▶ Trainer | 6 Decks | Lernkarten mit Spaced Repetition |
 
 Die Bereiche der unerfüllten Gefühle heissen: *Anders als es sollte, Bedrohung, Zu viel, Energie weg, Ohne Halt*. Bei den erfüllten: *Energie steigt, Nach innen, Nach vorne, Ganz da, Zu anderen*. Bei den Bedürfnissen: *Körper/Sicherheit/Orientierung, Beziehung, Selbst, Entfaltung & Sinn, Lebensqualität*.
 
@@ -28,22 +28,20 @@ Die Bereiche der unerfüllten Gefühle heissen: *Anders als es sollte, Bedrohung
 - **Leitern.** In 10 der 41 Töpfe sind die Wörter von leicht nach stark geordnet (irritiert → genervt → ärgerlich → … → wütend). Das Farbquadrat links neben jedem Wort wird mit der Stärke dunkler. Wörter, die sich nicht in der Stärke, sondern in der Art unterscheiden, stehen gestrichelt daneben — bei Ärger etwa *ungeduldig*, *geladen* und *zornig*.
 - **Abgrenzungspartner.** 173 Wörter nennen das Wort, mit dem sie am ehesten verwechselt werden.
 - **Schwellenfragen.** 106 Ja/Nein-Fragen, die genau ein Paar trennen: „Könntest du sagen, worüber?" → nein heisst *ärgerlich*, ja heisst *verärgert*. 75 davon trennen die Art, 31 die Stärke. Sie stehen in der Liste unter „Wo stehe ich?" bei der jeweiligen Gruppe.
-- **Englische Listen.** Nur Einträge mit deutschem Gegenstück; ein Klick darauf zeigt dessen Beschreibung. Wo Rosenberg kein Wort führt, das deutsche aber eines hat, steht eine eigene Übersetzung mit der Marke „ergänzt" (21 / 17 / 49 Einträge).
+- **Englische Listen.** Jedes deutsche Wort hat genau eine englische Übersetzung, möglichst aus Marshall Rosenbergs Liste. Ein Klick auf das deutsche Wort zeigt seine Beschreibung.
 
 ## Wie der Trainer funktioniert
 
 ### Decks
 
-Acht Kartentypen, einzeln zuschaltbar. Standardmässig sind die ersten vier an.
+Sechs Kartentypen, einzeln zuschaltbar. Standardmässig sind die ersten drei an.
 
 | Deck | Karten | Aufgabe |
 |---|---|---|
 | Gefühle unerfüllt / erfüllt / Bedürfnisse | 75 / 75 / 96 | Wort und Beschreibung verbinden |
-| Situationen | 24 | Zu einer Szene Gefühl und Bedürfnis finden |
 | Umschreiben | 96 | Von Fragen auf das Bedürfnis schliessen |
 | Frage wählen | 96 | Umgekehrt: zum Bedürfnis die passende Frage wählen |
 | Was trennt sie? | 106 | Zu einem Wortpaar die Schwellenfrage selbst finden |
-| Töpfe & Bereiche | 343 | Die Systematik selbst abfragen |
 
 Dazu zwei Umfänge: **Kernwortschatz** (93 der 246 Wörter, die im Alltag fast alles abdecken) oder **Alles**.
 

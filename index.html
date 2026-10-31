@@ -142,6 +142,10 @@ h1 { font-size: clamp(30px, 7vw, 46px); line-height: 1.05; margin: 28px 0 10px; 
 .lagerinfo p { margin: 0 0 6px; }
 .lagerinfo p:last-child { margin-bottom: 0; }
 .lagerinfo .linkish { font-size: 14.5px; }
+.lagerzeile { margin-top: 2px; }
+.lagerzeile .note.tiny { margin: 6px 2px 0; }
+.lagerzeile .lagerinfo { margin: 8px 0 0; }
+.lagerinfo.neu { margin: 10px 0 2px; }
 .tools { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .tool.file { position: relative; display: inline-flex; align-items: center; }
 .tool.file input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; pointer-events: none; }
@@ -1122,56 +1126,7 @@ const ITEM_GROUP = {};
 const Q_OWNER = {};
 Object.keys(U).forEach(w => (U[w] || []).forEach(q => { Q_OWNER[q] = w; }));
 
-const SITUATIONS = [
-  { s: "Du bringst im Team einen Vorschlag ein. Niemand geht darauf ein, das Gespräch läuft einfach weiter.",
-    f: ["enttäuscht", "verletzt", "ärgerlich"], b: ["Gehört werden", "Wertschätzung", "Beteiligung"] },
-  { s: "Deine Partnerin sagt kurzfristig ab, obwohl ihr den Abend seit Wochen geplant hattet.",
-    f: ["enttäuscht", "traurig", "verärgert"], b: ["Verlässlichkeit", "Nähe", "Verbindlichkeit"] },
-  { s: "Dein Kind zieht sich zum dritten Mal nicht an, obwohl ihr gleich los müsst.",
-    f: ["ungeduldig", "gestresst", "genervt"], b: ["Struktur", "Rücksichtnahme", "Leichtigkeit"] },
-  { s: "Nach einem Monat Arbeit kommt eine kurze Mail zurück: „Passt so.“",
-    f: ["enttäuscht", "unzufrieden", "unsicher"], b: ["Anerkennung", "Wissen, woran man ist", "Wertschätzung"] },
-  { s: "Ein Kollege ändert ohne Absprache etwas an deinem Modell.",
-    f: ["verärgert", "verunsichert", "ohnmächtig"], b: ["Einbezogen werden", "Autonomie", "Transparenz"] },
-  { s: "Du sitzt abends allein am Tisch. Alle sind im Bett, es ist still.",
-    f: ["ruhig", "entspannt", "einsam"], b: ["Ruhe", "Innerer Frieden", "Kontakt"] },
-  { s: "Deine Chefin fragt nach deiner Einschätzung und hört bis zum Ende zu.",
-    f: ["erfreut", "dankbar", "selbstsicher"], b: ["Gehört werden", "Wertschätzung", "Beteiligung"] },
-  { s: "Du liest zum dritten Mal dieselbe Seite und merkst, dass nichts hängen bleibt.",
-    f: ["müde", "frustriert", "antriebsarm"], b: ["Ruhe", "Entspannung", "Kraft"] },
-  { s: "Ein Freund erzählt dir von seiner Trennung und weint.",
-    f: ["berührt", "bewegt", "bekümmert"], b: ["Mitgefühl", "Anteilnahme", "Verbindung"] },
-  { s: "Du hast eine schwierige Prüfung bestanden, auf die du monatelang hingearbeitet hast.",
-    f: ["erleichtert", "stolz", "glücklich"], b: ["Feiern", "Wirksamkeit", "Anerkennung"] },
-  { s: "Im Büro läuft seit zwei Stunden ein lautes Gespräch direkt neben dir.",
-    f: ["genervt", "angespannt", "ungeduldig"], b: ["Ruhe", "Rücksichtnahme", "Privatsphäre"] },
-  { s: "Du sollst am Wochenende einspringen. Du hattest dir Zeit mit der Familie vorgenommen.",
-    f: ["zerrissen", "unter Druck", "verärgert"], b: ["Autonomie", "Wahlfreiheit", "Nähe"] },
-  { s: "Deine Nachricht wird gelesen, aber tagelang nicht beantwortet.",
-    f: ["verunsichert", "ungeduldig", "verletzt"], b: ["Wissen, woran man ist", "Verbindlichkeit", "Kontakt"] },
-  { s: "Du gehst früh los, und die Berge liegen im ersten Licht.",
-    f: ["berührt", "lebendig", "dankbar"], b: ["Schönheit", "Lebendigkeit", "Spiritualität"] },
-  { s: "In der Sitzung wird eine Entscheidung verkündet, die dich direkt betrifft. Du hörst zum ersten Mal davon.",
-    f: ["bestürzt", "verärgert", "ohnmächtig"], b: ["Einbezogen werden", "Transparenz", "Beteiligung"] },
-  { s: "Dein Sohn kommt angerannt und zeigt dir, was er gebaut hat.",
-    f: ["erfreut", "liebevoll", "gerührt"], b: ["Verbindung", "Freude bereiten", "Teilnehmen"] },
-  { s: "Du hast im Streit etwas gesagt, das du bereust.",
-    f: ["bedrückt", "unruhig", "bekümmert"], b: ["Innerer Frieden", "Integrität", "Frieden"] },
-  { s: "Morgen steht ein Gespräch an, in dem du etwas Unangenehmes ansprechen willst.",
-    f: ["angespannt", "ängstlich", "entschlossen"], b: ["Ehrlichkeit", "Konfliktfähigkeit", "Klarheit"] },
-  { s: "Du arbeitest seit Monaten an etwas, von dem du nicht weisst, ob es je jemand braucht.",
-    f: ["unsicher", "antriebsarm", "frustriert"], b: ["Sinn", "Wirksamkeit", "Orientierung"] },
-  { s: "Jemand erklärt dir zum zweiten Mal etwas, das du längst kannst.",
-    f: ["genervt", "ungeduldig", "verletzt"], b: ["Anerkennung", "Partnerschaftlicher Umgang", "Autonomie"] },
-  { s: "Ihr lacht am Tisch über etwas, das nur ihr versteht.",
-    f: ["vergnügt", "ausgelassen", "liebevoll"], b: ["Dazugehören", "Spiel", "Verbindung"] },
-  { s: "Du hast zugesagt, etwas zu übernehmen, und merkst jetzt, dass es zu viel ist.",
-    f: ["überlastet", "zerrissen", "besorgt"], b: ["Unterstützung", "Selbstbestimmung", "Ruhe"] },
-  { s: "Ein Termin nach dem anderen, seit sieben Uhr, ohne Pause.",
-    f: ["atemlos", "gestresst", "abgespannt"], b: ["Ruhe", "Bewegung", "Struktur"] },
-  { s: "Jemand sagt dir, dass dein Beitrag den Unterschied gemacht hat.",
-    f: ["erfreut", "stolz", "gerührt"], b: ["Anerkennung", "Bedeutsamkeit", "Wirksamkeit"] }
-];
+const SITUATIONS = [];
 
 // ================= Intensitäts- und Art-Checks =================
 // Jede Zeile trennt zwei verwechselbare Wörter durch eine Frage, die du dir selbst stellst.
@@ -1369,296 +1324,13 @@ const SCHWELLEN = [
 const SCHWELLEN_BY_G = {};
 SCHWELLEN.forEach(x => { (SCHWELLEN_BY_G[x.g] = SCHWELLEN_BY_G[x.g] || []).push(x); });
 
-// ================= Rosenbergs englische Listen =================
-// Dreimal dieselbe Logik: w = Wörter, die es hier schon gibt (anklickbar),
-// t = Übersetzung ohne eigenen Eintrag, d = nur dann die Abgrenzung,
-// nah = verwandte vorhandene Wörter, hw = Hinweis, wenn die Listen sich kreuzen.
-// ================= Rosenbergs englische Listen =================
-// Nur Einträge, die hier ein deutsches Gegenstück haben — der Chip führt zu dessen
-// Beschreibung. Deutsche Wörter, für die Rosenberg kein Wort hat, sind mit neu: true
-// ergänzt und übersetzt; die Übersetzung stammt dann nicht aus dem Buch.
-const EN_NEG = [
-  { id: "enn-0", name: "a – d", sub: "afraid bis disappointed", accent: "#9E4A3A", accentD: "#DB8C7C", items: [
-    { e: "afraid", w: ["ängstlich"] },
-    { e: "aggravated", w: ["verärgert"] },
-    { e: "agitated", w: ["unruhig"] },
-    { e: "alarmed", w: ["alarmiert"] },
-    { e: "angry", w: ["ärgerlich", "wütend"] },
-    { e: "annoyed", w: ["genervt"] },
-    { e: "anxious", w: ["beunruhigt", "besorgt"] },
-    { e: "apathetic", w: ["teilnahmslos"] },
-    { e: "apprehensive", w: ["besorgt"] },
-    { e: "at the end of my rope", w: ["nervlich am Ende"], neu: true },
-    { e: "bewildered", w: ["verwirrt", "durcheinander"] },
-    { e: "bitter", w: ["verbittert"] },
-    { e: "blue", w: ["niedergeschlagen"] },
-    { e: "bored", w: ["gelangweilt"] },
-    { e: "concerned", w: ["besorgt"],
-      hw: "Steht bei Rosenberg in beiden Listen; erfüllt meint es zugewandt, anteilnehmend." },
-    { e: "confused", w: ["verwirrt"] },
-    { e: "cross", w: ["ärgerlich"] },
-    { e: "dejected", w: ["niedergeschlagen"] },
-    { e: "depressed", w: ["deprimiert"] },
-    { e: "despairing", w: ["verzweifelt"] },
-    { e: "detached", w: ["abwesend"] },
-    { e: "disappointed", w: ["enttäuscht"] }
-  ]},
-  { id: "enn-1", name: "d – h", sub: "disgruntled bis hurt", accent: "#8A4F2A", accentD: "#D39A6A", items: [
-    { e: "disgruntled", w: ["unzufrieden"] },
-    { e: "dismayed", w: ["bestürzt"] },
-    { e: "displeased", w: ["unzufrieden"] },
-    { e: "disquieted", w: ["beunruhigt"] },
-    { e: "disturbed", w: ["verstört"] },
-    { e: "downcast", w: ["niedergeschlagen"] },
-    { e: "downhearted", w: ["bedrückt"] },
-    { e: "embittered", w: ["verbittert"] },
-    { e: "empty", w: ["leer"], neu: true },
-    { e: "exasperated", w: ["aufgebracht"] },
-    { e: "exhausted", w: ["ausgelaugt"] },
-    { e: "fatigued", w: ["ermüdet"] },
-    { e: "fearful", w: ["ängstlich"] },
-    { e: "feeble", w: ["matt"], neu: true },
-    { e: "frozen", w: ["erstarrt"], neu: true },
-    { e: "frustrated", w: ["frustriert"] },
-    { e: "furious", w: ["zornig", "wütend"] },
-    { e: "heavy", w: ["schwer"] },
-    { e: "helpless", w: ["hilflos"] },
-    { e: "hesitant", w: ["zögerlich"] },
-    { e: "horrified", w: ["entsetzt"] },
-    { e: "hurt", w: ["verletzt"] }
-  ]},
-  { id: "enn-2", name: "i – s", sub: "impatient bis sad", accent: "#7A4A86", accentD: "#C193CE", items: [
-    { e: "impatient", w: ["ungeduldig"] },
-    { e: "inhibited", w: ["gehemmt"], neu: true },
-    { e: "irate", w: ["zornig"] },
-    { e: "irritated", w: ["irritiert"] },
-    { e: "jealous", w: ["eifersüchtig"],
-      hw: "Im Englischen deckt jealous auch den Neid ab. Im Deutschen ist eifersüchtig auf eine Person bezogen: Ich fürchte, sie an einen Dritten zu verlieren. „Er hat etwas, das ich nicht habe“ wäre neidisch." },
-    { e: "leery", w: ["misstrauisch"] },
-    { e: "lethargic", w: ["antriebsarm"] },
-    { e: "lonely", w: ["einsam"] },
-    { e: "lost", w: ["verloren"], neu: true },
-    { e: "mad", w: ["wütend"] },
-    { e: "miserable", w: ["elend"] },
-    { e: "mournful", w: ["bekümmert", "traurig"] },
-    { e: "overwhelmed", w: ["überwältigt", "überlastet"],
-      hw: "Steht bei Rosenberg in beiden Listen; erfüllt meint es überwältigt vor Freude." },
-    { e: "panicky", w: ["panisch"] },
-    { e: "paralysed", w: ["gelähmt"], neu: true },
-    { e: "powerless", w: ["ohnmächtig"], neu: true },
-    { e: "ready to blow", w: ["explosiv"], neu: true },
-    { e: "reluctant", w: ["widerwillig"] },
-    { e: "restless", w: ["unruhig"] },
-    { e: "run off my feet", w: ["atemlos"], neu: true },
-    { e: "run-down", w: ["schlapp"], neu: true },
-    { e: "sad", w: ["traurig"] }
-  ]},
-  { id: "enn-3", name: "s – w", sub: "shaken bis worried", accent: "#2F6B6B", accentD: "#79BFBF", items: [
-    { e: "shaken", w: ["verunsichert"], neu: true },
-    { e: "shocked", w: ["schockiert"] },
-    { e: "simmering", w: ["geladen"], neu: true },
-    { e: "sobered", w: ["betroffen"], neu: true },
-    { e: "sore at someone", w: ["sauer"], neu: true },
-    { e: "spent", w: ["abgespannt"], neu: true },
-    { e: "spiritless", w: ["leblos"] },
-    { e: "stressed", w: ["gestresst"], neu: true },
-    { e: "suspicious", w: ["misstrauisch"] },
-    { e: "tired", w: ["müde"] },
-    { e: "torn", w: ["zerrissen"], neu: true },
-    { e: "troubled", w: ["beunruhigt"] },
-    { e: "uncomfortable", w: ["unbehaglich"] },
-    { e: "under pressure", w: ["unter Druck"], neu: true },
-    { e: "uneasy", w: ["unwohl"] },
-    { e: "unhappy", w: ["unglücklich"] },
-    { e: "unsure of myself", w: ["unsicher"], neu: true },
-    { e: "uptight", w: ["verspannt", "angespannt"] },
-    { e: "vexed", w: ["verärgert"] },
-    { e: "weighed down", w: ["belastet"], neu: true },
-    { e: "worried", w: ["besorgt"] }
-  ]}
-];
-const EN_POS = [
-  { id: "enp-0", name: "a – c", sub: "active bis courageous", accent: "#9E4A3A", accentD: "#DB8C7C", items: [
-    { e: "active", w: ["aktiv"], neu: true },
-    { e: "affectionate", w: ["liebevoll"] },
-    { e: "alert", w: ["wach", "aufmerksam"] },
-    { e: "alive", w: ["lebendig"] },
-    { e: "amused", w: ["lustig", "vergnügt"] },
-    { e: "animated", w: ["angeregt", "belebt"] },
-    { e: "appreciative", w: ["dankbar"] },
-    { e: "at ease", w: ["locker"], neu: true },
-    { e: "blissful", w: ["selig"] },
-    { e: "buoyant", w: ["beschwingt"] },
-    { e: "calm", w: ["ruhig"] },
-    { e: "carefree", w: ["sorglos", "unbeschwert"] },
-    { e: "carried", w: ["getragen"], neu: true },
-    { e: "centred", w: ["zentriert"], neu: true },
-    { e: "cheerful", w: ["fröhlich"] },
-    { e: "clear-headed", w: ["klar"], neu: true },
-    { e: "comfortable", w: ["behaglich"] },
-    { e: "confident", w: ["zuversichtlich", "selbstsicher"] },
-    { e: "contented", w: ["zufrieden"] },
-    { e: "courageous", w: ["mutig"], neu: true }
-  ]},
-  { id: "enp-1", name: "c – g", sub: "curious bis grateful", accent: "#8A4F2A", accentD: "#D39A6A", items: [
-    { e: "curious", w: ["neugierig"] },
-    { e: "delighted", w: ["entzückt"] },
-    { e: "determined", w: ["entschlossen"], neu: true },
-    { e: "elated", w: ["hocherfreut"] },
-    { e: "energetic", w: ["energievoll"] },
-    { e: "enlivened", w: ["belebt"] },
-    { e: "enthusiastic", w: ["enthusiastisch", "begeistert"] },
-    { e: "even-keeled", w: ["ausgeglichen"], neu: true },
-    { e: "excited", w: ["aufgeregt"] },
-    { e: "exhilarated", w: ["berauscht"] },
-    { e: "expectant", w: ["gespannt"] },
-    { e: "exultant", w: ["jubelnd"] },
-    { e: "fascinated", w: ["fasziniert"] },
-    { e: "free", w: ["befreit"] },
-    { e: "fulfilled", w: ["erfüllt"] },
-    { e: "glad", w: ["froh"] },
-    { e: "gleeful", w: ["vergnügt", "ausgelassen"] },
-    { e: "glowing", w: ["strahlend"] },
-    { e: "good-humored", w: ["gut gelaunt"] },
-    { e: "grateful", w: ["dankbar"] }
-  ]},
-  { id: "enp-2", name: "h – p", sub: "happy bis pleased", accent: "#7A4A86", accentD: "#C193CE", items: [
-    { e: "happy", w: ["glücklich"] },
-    { e: "happy-go-lucky", w: ["unbekümmert"], neu: true },
-    { e: "hopeful", w: ["hoffnungsvoll"] },
-    { e: "inspired", w: ["inspiriert"] },
-    { e: "invigorated", w: ["erfrischt", "belebt"] },
-    { e: "involved", w: ["engagiert"] },
-    { e: "joyous, joyful", w: ["freudig"] },
-    { e: "jubilant", w: ["jubelnd"] },
-    { e: "lifted", w: ["beflügelt"], neu: true },
-    { e: "light", w: ["leicht"], neu: true },
-    { e: "looked after", w: ["behütet"], neu: true },
-    { e: "loving", w: ["liebevoll"] },
-    { e: "merry", w: ["heiter"] },
-    { e: "motivated", w: ["motiviert"], neu: true },
-    { e: "moved", w: ["bewegt"] },
-    { e: "open", w: ["offen"], neu: true },
-    { e: "optimistic", w: ["optimistisch"] },
-    { e: "peaceful", w: ["friedlich"] },
-    { e: "perky", w: ["munter"] },
-    { e: "pleased", w: ["erfreut"] }
-  ]},
-  { id: "enp-3", name: "p – w", sub: "powerful bis wide-awake", accent: "#2F6B6B", accentD: "#79BFBF", items: [
-    { e: "powerful", w: ["kraftvoll"], neu: true },
-    { e: "proud", w: ["stolz"] },
-    { e: "quiet", w: ["ruhig"] },
-    { e: "radiant", w: ["strahlend"] },
-    { e: "reassured", w: ["beruhigt"], neu: true },
-    { e: "refreshed", w: ["erfrischt"] },
-    { e: "relaxed", w: ["entspannt"] },
-    { e: "relieved", w: ["erleichtert"] },
-    { e: "satisfied", w: ["zufrieden"] },
-    { e: "secure", w: ["sicher", "geschützt"] },
-    { e: "serene", w: ["gelassen"] },
-    { e: "stimulated", w: ["angeregt"] },
-    { e: "thankful", w: ["dankbar"] },
-    { e: "thrilled", w: ["begeistert"] },
-    { e: "touched", w: ["gerührt", "berührt"] },
-    { e: "tranquil", w: ["friedlich", "ruhig"] },
-    { e: "trusting", w: ["vertrauensvoll"] },
-    { e: "unburdened", w: ["entlastet"], neu: true },
-    { e: "upbeat", w: ["gut gelaunt", "optimistisch"] },
-    { e: "wide-awake", w: ["hellwach"] }
-  ]}
-];
-const EN_NEEDS = [
-  { id: "enb-0", name: "a – c", sub: "acceptance bis connection", accent: "#9E4A3A", accentD: "#DB8C7C", items: [
-    { e: "acceptance", w: ["Akzeptanz", "Angenommen sein"] },
-    { e: "aliveness", w: ["Lebendigkeit"], neu: true },
-    { e: "appreciation", w: ["Wertschätzung"] },
-    { e: "authenticity", w: ["Authentizität", "Ehrlichkeit"] },
-    { e: "awareness", w: ["Bewusstheit"], neu: true },
-    { e: "beauty", w: ["Schönheit"] },
-    { e: "being cared for", w: ["Fürsorge"], neu: true },
-    { e: "being heard", w: ["Gehört werden"], neu: true },
-    { e: "being included", w: ["Einbezogen werden"], neu: true },
-    { e: "being noticed", w: ["Wahrgenommen werden"], neu: true },
-    { e: "being seen", w: ["Gesehen werden"], neu: true },
-    { e: "being treated as a person", w: ["Menschlichkeit"], neu: true },
-    { e: "belonging", w: ["Dazugehören"], neu: true },
-    { e: "bringing joy to someone", w: ["Freude bereiten"], neu: true },
-    { e: "clarity", w: ["Klarheit"], neu: true },
-    { e: "closeness", w: ["Nähe"] },
-    { e: "comfort", w: ["Trost"], neu: true },
-    { e: "commitment", w: ["Verbindlichkeit"], neu: true },
-    { e: "community", w: ["Gemeinschaft", "Zugehörigkeit"] },
-    { e: "connection", w: ["Verbindung"], neu: true }
-  ]},
-  { id: "enb-1", name: "c – h", sub: "consideration bis hope", accent: "#8A4F2A", accentD: "#D39A6A", items: [
-    { e: "consideration", w: ["Rücksichtnahme"] },
-    { e: "contact", w: ["Kontakt"], neu: true },
-    { e: "continuity", w: ["Kontinuität"], neu: true },
-    { e: "contribution to the enrichment of life", w: ["Beitragen", "Wirksamkeit"] },
-    { e: "creativity", w: ["Kreativität"] },
-    { e: "development", w: ["Entwicklung"], neu: true },
-    { e: "dignity", w: ["Würde"], neu: true },
-    { e: "emotional safety", w: ["Geborgenheit", "Sicherheit"] },
-    { e: "empathy", w: ["Mitgefühl", "Anteilnahme"] },
-    { e: "equanimity", w: ["Gelassenheit"], neu: true },
-    { e: "exchange", w: ["Austausch"], neu: true },
-    { e: "food", w: ["Nahrung"] },
-    { e: "fun", w: ["Spiel", "Lebensfreude"] },
-    { e: "goodwill", w: ["Wohlwollen"], neu: true },
-    { e: "growth", w: ["Wachstum"], neu: true },
-    { e: "harmony", w: ["Harmonie"] },
-    { e: "having a say", w: ["Beteiligung"], neu: true },
-    { e: "health", w: ["Gesundheit"], neu: true },
-    { e: "honesty", w: ["Ehrlichkeit", "Offenheit"] },
-    { e: "hope", w: ["Hoffnung"], neu: true }
-  ]},
-  { id: "enb-2", name: "i – s", sub: "integrity bis self-confidence", accent: "#7A4A86", accentD: "#C193CE", items: [
-    { e: "integrity", w: ["Integrität"], neu: true,
-      hw: "Bei Rosenberg ist Integrity der Name einer Gruppe, kein Eintrag — und meint dort Authentizität, Kreativität, Sinn und Selbstwert." },
-    { e: "intimacy", w: ["Intimität"], neu: true },
-    { e: "knowing where I stand", w: ["Wissen, woran man ist"], neu: true },
-    { e: "leniency", w: ["Güte"], neu: true },
-    { e: "lightness", w: ["Leichtigkeit"], neu: true },
-    { e: "love", w: ["Liebe"] },
-    { e: "making sense of things", w: ["Verstehen"], neu: true,
-      hw: "Nicht understanding: das steht in Rosenbergs Liste für Verständnis, also verstanden zu werden." },
-    { e: "meaning", w: ["Sinn", "Bedeutsamkeit"] },
-    { e: "meeting as equals", w: ["Partnerschaftlicher Umgang"], neu: true },
-    { e: "motivation", w: ["Motivation"], neu: true },
-    { e: "movement, exercise", w: ["Bewegung"] },
-    { e: "order", w: ["Struktur", "Orientierung"] },
-    { e: "owning my choices", w: ["Selbstverantwortung"], neu: true },
-    { e: "peace", w: ["Frieden", "Innerer Frieden"] },
-    { e: "privacy", w: ["Privatsphäre"], neu: true },
-    { e: "protection from life-threatening forms of life: viruses, bacteria, insects, predatory animals", w: ["Schutz", "Unversehrtheit"] },
-    { e: "recognition", w: ["Anerkennung"], neu: true,
-      hw: "Rosenbergs appreciation führt hier auf Wertschätzung; für den Massstab, an dem gemessen wird, fehlt ihm ein eigenes Wort." },
-    { e: "rest", w: ["Ruhe", "Entspannung"] },
-    { e: "room for conflict", w: ["Konfliktfähigkeit"], neu: true },
-    { e: "self-confidence", w: ["Selbstvertrauen"], neu: true }
-  ]},
-  { id: "enb-3", name: "s – w", sub: "self-expression bis warmth", accent: "#2F6B6B", accentD: "#79BFBF", items: [
-    { e: "self-expression", w: ["Selbstausdruck"], neu: true },
-    { e: "self-realization", w: ["Selbstverwirklichung"], neu: true },
-    { e: "self-respect", w: ["Selbstrespekt"], neu: true },
-    { e: "solidarity", w: ["Solidarität"], neu: true },
-    { e: "spirituality", w: ["Spiritualität"], neu: true },
-    { e: "standing up for myself", w: ["Selbstbehauptung"], neu: true },
-    { e: "strength", w: ["Kraft"], neu: true },
-    { e: "support", w: ["Unterstützung"] },
-    { e: "taking part", w: ["Teilnehmen"], neu: true },
-    { e: "to celebrate losses: loved ones, dreams, etc. (mourning)", w: ["Trauern", "Loslassen"] },
-    { e: "to celebrate the creation of life and dreams fulfilled", w: ["Feiern", "Lebensfreude"] },
-    { e: "to choose one's dreams, goals, values", w: ["Selbstbestimmung", "Träume/Ziele", "Autonomie"] },
-    { e: "to choose one's plan for fulfilling one's dreams, goals, values", w: ["Wahlfreiheit", "Freiheit"] },
-    { e: "tolerance", w: ["Toleranz"], neu: true },
-    { e: "transparency", w: ["Transparenz"], neu: true },
-    { e: "trust", w: ["Vertrauen", "Verlässlichkeit"] },
-    { e: "understanding", w: ["Verständnis"] },
-    { e: "undivided attention", w: ["Aufmerksamkeit (Zuwendung)"], neu: true },
-    { e: "warmth", w: ["Wärme"] }
-  ]}
-];
+// ================= Englische Übersetzungen =================
+// Jedes deutsche Stichwort mit genau einer englischen Übersetzung, in denselben Töpfen.
+// Keine Übersetzung kommt zweimal vor; mehrteilige Ausdrücke nur, wo kein Wort passt.
+const EN_DE = {"irritiert": "irked", "genervt": "annoyed", "ärgerlich": "irritable", "verärgert": "angered", "sauer": "cross", "aufgebracht": "worked up", "wütend": "furious", "explosiv": "about to explode", "ungeduldig": "impatient", "geladen": "seething", "zornig": "indignant", "unzufrieden": "dissatisfied", "enttäuscht": "disappointed", "frustriert": "frustrated", "verletzt": "hurt", "verbittert": "bitter", "besorgt": "worried", "beunruhigt": "uneasy", "ängstlich": "afraid", "panisch": "panicked", "unruhig": "restless", "alarmiert": "alarmed", "bestürzt": "dismayed", "schockiert": "shocked", "betroffen": "affected", "entsetzt": "horrified", "erstarrt": "frozen", "verstört": "shaken", "angespannt": "tense", "verspannt": "stiff", "unter Druck": "under pressure", "gestresst": "stressed", "atemlos": "breathless", "belastet": "weighed down", "überlastet": "overloaded", "überwältigt": "overwhelmed", "nervlich am Ende": "frazzled", "müde": "sleepy", "ermüdet": "tired out", "abgespannt": "worn out", "schlapp": "sluggish", "matt": "weak", "ausgelaugt": "burnt out", "traurig": "sad", "bekümmert": "troubled", "bedrückt": "heavy-hearted", "schwer": "heavy", "niedergeschlagen": "dejected", "deprimiert": "depressed", "elend": "miserable", "unglücklich": "unhappy", "hilflos": "helpless", "ohnmächtig": "powerless", "gelähmt": "paralysed", "verzweifelt": "despairing", "antriebsarm": "unmotivated", "teilnahmslos": "apathetic", "leer": "empty", "leblos": "lifeless", "gelangweilt": "bored", "abwesend": "absent-minded", "unwohl": "out of sorts", "unbehaglich": "uncomfortable", "unsicher": "insecure", "verunsichert": "unsettled", "zögerlich": "hesitant", "gehemmt": "inhibited", "verwirrt": "confused", "durcheinander": "mixed up", "zerrissen": "torn", "verloren": "lost", "einsam": "lonely", "eifersüchtig": "jealous", "misstrauisch": "suspicious", "widerwillig": "reluctant", "gut gelaunt": "in a good mood", "froh": "glad", "erfreut": "pleased", "heiter": "light-hearted", "fröhlich": "cheerful", "vergnügt": "enjoying myself", "lustig": "amused", "freudig": "looking forward", "hocherfreut": "delighted", "strahlend": "beaming", "entzückt": "charmed", "ausgelassen": "exuberant", "jubelnd": "jubilant", "glücklich": "happy", "selig": "blissful", "zufrieden": "content", "erfüllt": "fulfilled", "angeregt": "stimulated", "begeistert": "thrilled", "enthusiastisch": "enthusiastic", "berauscht": "exhilarated", "fasziniert": "fascinated", "beflügelt": "uplifted", "neugierig": "curious", "gespannt": "in suspense", "aufgeregt": "excited", "hoffnungsvoll": "hopeful", "zuversichtlich": "confident", "optimistisch": "optimistic", "erfrischt": "refreshed", "munter": "lively", "belebt": "invigorated", "lebendig": "alive", "aktiv": "active", "energievoll": "energetic", "kraftvoll": "strong", "aufmerksam": "attentive", "wach": "alert", "hellwach": "wide awake", "klar": "clear-headed", "zentriert": "centred", "inspiriert": "inspired", "motiviert": "motivated", "engagiert": "committed", "entschlossen": "determined", "selbstsicher": "self-assured", "stolz": "proud", "mutig": "brave", "ruhig": "calm", "beruhigt": "calmed down", "entspannt": "relaxed", "locker": "easygoing", "gelassen": "composed", "ausgeglichen": "balanced", "friedlich": "peaceful", "erleichtert": "relieved", "entlastet": "unburdened", "befreit": "liberated", "leicht": "light", "unbeschwert": "carefree", "unbekümmert": "happy-go-lucky", "sorglos": "untroubled", "beschwingt": "buoyant", "sicher": "safe", "geschützt": "protected", "behütet": "looked after", "getragen": "supported", "behaglich": "cosy", "berührt": "touched", "bewegt": "moved", "gerührt": "choked up", "liebevoll": "affectionate", "offen": "open", "vertrauensvoll": "trusting", "dankbar": "grateful", "Nahrung": "food", "Gesundheit": "health", "Bewegung": "movement", "Ruhe": "quiet", "Entspannung": "relaxation", "Kraft": "strength", "Sicherheit": "safety", "Schutz": "protection", "Unversehrtheit": "being unharmed", "Geborgenheit": "feeling sheltered", "Orientierung": "orientation", "Klarheit": "clarity", "Struktur": "structure", "Transparenz": "transparency", "Wissen, woran man ist": "knowing where I stand", "Kontinuität": "continuity", "Verbindlichkeit": "binding agreements", "Verlässlichkeit": "reliability", "Vertrauen": "trust", "Aufmerksamkeit (Zuwendung)": "attention", "Wahrgenommen werden": "being noticed", "Gesehen werden": "being seen", "Gehört werden": "being heard", "Verständnis": "being understood", "Akzeptanz": "acceptance", "Angenommen sein": "being welcomed as I am", "Anerkennung": "recognition", "Wertschätzung": "appreciation", "Kontakt": "contact", "Austausch": "exchange", "Verbindung": "connection", "Nähe": "closeness", "Wärme": "warmth", "Intimität": "intimacy", "Liebe": "love", "Dazugehören": "fitting in", "Zugehörigkeit": "belonging", "Gemeinschaft": "community", "Einbezogen werden": "being included", "Teilnehmen": "taking part", "Beteiligung": "having a say", "Solidarität": "solidarity", "Anteilnahme": "caring interest", "Mitgefühl": "compassion", "Trost": "comfort", "Unterstützung": "support", "Fürsorge": "care", "Rücksichtnahme": "consideration", "Partnerschaftlicher Umgang": "being treated as an equal", "Toleranz": "tolerance", "Wohlwollen": "goodwill", "Güte": "kindness", "Menschlichkeit": "humanity", "Konfliktfähigkeit": "working through conflict", "Ehrlichkeit": "honesty", "Offenheit": "openness", "Authentizität": "authenticity", "Integrität": "integrity", "Selbstausdruck": "self-expression", "Autonomie": "autonomy", "Freiheit": "freedom", "Wahlfreiheit": "choice", "Selbstbestimmung": "self-determination", "Selbstverantwortung": "self-responsibility", "Selbstbehauptung": "standing up for myself", "Privatsphäre": "privacy", "Selbstvertrauen": "self-confidence", "Selbstrespekt": "self-respect", "Würde": "dignity", "Beitragen": "contribution", "Freude bereiten": "bringing joy", "Wirksamkeit": "effectiveness", "Bedeutsamkeit": "mattering", "Entwicklung": "development", "Wachstum": "growth", "Selbstverwirklichung": "self-realisation", "Kreativität": "creativity", "Träume/Ziele": "dreams and goals", "Motivation": "motivation", "Verstehen": "comprehension", "Sinn": "meaning", "Spiritualität": "spirituality", "Hoffnung": "hope", "Bewusstheit": "awareness", "Schönheit": "beauty", "Frieden": "peace", "Innerer Frieden": "inner peace", "Harmonie": "harmony", "Gelassenheit": "equanimity", "Lebendigkeit": "aliveness", "Lebensfreude": "joy of life", "Spiel": "play", "Leichtigkeit": "ease", "Feiern": "celebration", "Trauern": "mourning", "Loslassen": "letting go"};
+const enGruppen = gs => gs.map(g => ({ id: "en-" + g.id, name: g.name, sub: g.sub, accent: g.accent, accentD: g.accentD,
+  items: g.items.filter(i => EN_DE[i.w]).map(i => ({ e: EN_DE[i.w], w: [i.w] })) }));
+const EN_NEG = enGruppen(NEG), EN_POS = enGruppen(POS), EN_NEEDS = enGruppen(NEEDS);
 
 const MODES = {
   neg: {
@@ -1677,19 +1349,19 @@ const MODES = {
     keys: []
   },
   enNeg: {
-    tab: "EN unerfüllt", title: "Rosenbergs Liste: needs not being met", en: true, groups: EN_NEG,
+    tab: "EN unerfüllt", title: "Englisch: Gefühle unerfüllt", en: true, groups: EN_NEG,
     unit: ["Wort", "Wörter"], ph: "englisches oder deutsches Wort suchen",
-    lead: "Rosenbergs Liste von Seite 45 und 46, auf die Wörter reduziert, die hier ein deutsches Gegenstück haben — und ergänzt um die deutschen, für die er keines hat. Ein Klick auf das deutsche Wort zeigt dessen Beschreibung."
+    lead: "Jedes Gefühl aus «Gefühle unerfüllt» mit einer englischen Übersetzung, in denselben Töpfen. Wo möglich das Wort aus Marshall Rosenbergs Liste, sonst eine möglichst eindeutige Übersetzung. Ein Klick auf das deutsche Wort zeigt seine Beschreibung."
   },
   enPos: {
-    tab: "EN erfüllt", title: "Rosenbergs Liste: needs being met", en: true, groups: EN_POS,
+    tab: "EN erfüllt", title: "Englisch: Gefühle erfüllt", en: true, groups: EN_POS,
     unit: ["Wort", "Wörter"], ph: "englisches oder deutsches Wort suchen",
-    lead: "Rosenbergs Liste von Seite 44, auf die Wörter mit deutschem Gegenstück reduziert und um die fehlenden ergänzt. Wo ein Wort bei ihm in beiden Listen steht, ist vermerkt, was die jeweilige Seite meint."
+    lead: "Jedes Gefühl aus «Gefühle erfüllt» mit einer englischen Übersetzung, in denselben Töpfen. Wo möglich das Wort aus Marshall Rosenbergs Liste, sonst eine möglichst eindeutige Übersetzung. Ein Klick auf das deutsche Wort zeigt seine Beschreibung."
   },
   enNeeds: {
-    tab: "EN Bedürfnisse", title: "Rosenbergs Liste: basic human needs", en: true, groups: EN_NEEDS,
+    tab: "EN Bedürfnisse", title: "Englisch: Bedürfnisse", en: true, groups: EN_NEEDS,
     unit: ["Bedürfnis", "Bedürfnisse"], ph: "englisches oder deutsches Wort suchen",
-    lead: "Rosenbergs Liste von Seite 54 und 55 ist viel kürzer als die deutsche hier — zwei Drittel dieser Einträge sind deshalb Übersetzungen deutscher Bedürfnisse, für die er kein eigenes Wort führt."
+    lead: "Jedes Bedürfnis aus «Bedürfnisse» mit einer englischen Übersetzung, in denselben Töpfen. Wo möglich das Wort aus Marshall Rosenbergs Liste, sonst eine möglichst eindeutige Übersetzung. Ein Klick auf das deutsche Wort zeigt seine Beschreibung."
   },
   umschreiben: {
     tab: "Umschreiben", title: "Bedürfnisse umschreiben", ph: "Bedürfnis oder Stichwort suchen", unit: ["Bedürfnis", "Bedürfnisse"], groups: NEEDS, questions: true,
@@ -1757,12 +1429,11 @@ const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.f
 const MG = { neg: NEG, pos: POS, needs: NEEDS };
 const DECKS = [
   { id: "neg", label: "Gefühle unerfüllt" }, { id: "pos", label: "Gefühle erfüllt" },
-  { id: "needs", label: "Bedürfnisse" }, { id: "sit", label: "Situationen" },
+  { id: "needs", label: "Bedürfnisse" },
   { id: "um", label: "Umschreiben" }, { id: "umq", label: "Frage wählen" },
-  { id: "schwelle", label: "Was trennt sie?" },
-  { id: "struktur", label: "Töpfe & Bereiche" }
+  { id: "schwelle", label: "Was trennt sie?" }
 ];
-const DEF_DECKS = { neg: true, pos: true, needs: true, sit: true, um: false, umq: false, schwelle: false, struktur: false };
+const DEF_DECKS = { neg: true, pos: true, needs: true, um: false, umq: false, schwelle: false };
 // Nur bekannte Schlüssel übernehmen, damit umbenannte Kartentypen nicht ewig mitgeschleppt werden.
 const cleanDecks = d => {
   const out = {};
@@ -2146,7 +1817,6 @@ function buildPool(decks, coreOnly) {
     if (!(U[i.w] || []).length) return;
     out.push({ key: "q|" + i.w, kind: "umq", mode: "needs", gid: g.id, w: i.w });
   }));
-  if (decks.sit) SITUATIONS.forEach((x, k) => out.push({ key: "s|" + k, kind: "sit", gid: "sit", idx: k }));
   if (decks.schwelle) SCHWELLEN.forEach((x, k) => {
     if (coreOnly && !(ITEM[x.a].core || ITEM[x.b].core)) return;   // eine Seite im Kern genügt
     out.push({ key: "w|" + k, kind: "schwelle", gid: x.g, sw: x });
@@ -2539,9 +2209,8 @@ function Trainer({ profile, save, bar, transfer, synced, mehrere }) {
         h("ol", { className: "stufen" }, STUFEN_UMQ.map(([t, d], k) =>
           h("li", { key: t }, h("b", null, t + ". "), d))),
         h("p", { className: "rule" }, "Welche der drei Umschreibungen die richtige ist, wechselt von Begegnung zu Begegnung — du lernst also nicht einen Satz auswendig. Nach dem Aufdecken steht da, zu welchem Bedürfnis die anderen Fragen gehört hätten."),
-        h("p", { className: "rule" }, "Situationen haben keine Stufen; dort ist die Aufgabe von Anfang an die gleiche."),
         h("p", { className: "rule" }, h("b", null, "Schwellen. "), "„Was trennt sie?“ übt die Grenze zwischen zwei ähnlichen Wörtern. Lohnt sich erst, wenn die Wörter selbst sitzen."),
-        h("p", { className: "rule" }, h("b", null, "Reihenfolge. "), "Woche 1 bis 2 nur Gefühle und Bedürfnisse im Kernwortschatz. Dann Situationen dazu. Umschreiben zuletzt, wenn die Wörter sitzen."))),
+        h("p", { className: "rule" }, h("b", null, "Reihenfolge. "), "Woche 1 bis 2 nur Gefühle und Bedürfnisse im Kernwortschatz. Umschreiben und «Was trennt sie?» erst, wenn die Wörter sitzen."))),
 
       !synced && transfer,
 
@@ -2939,18 +2608,25 @@ function TrainerRoot() {
     el.open = true;
     el.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
   };
+  // Wo der Lernstand liegt: im Trainer nur eine Zeile, der ganze Text auf Wunsch
+  // und beim Anlegen einer Person.
+  const [mehrInfo, setMehrInfo] = useState(false);
+  const infoText = [
+    h("p", { key: "a" }, h("b", null, "Dein Lernstand bleibt nur in diesem Browser. "),
+      "Es gibt kein Konto und keinen Server, und niemand sonst sieht deinen Fortschritt. Lern deshalb immer im selben "
+      + "Browser und nicht im privaten Fenster. Wer die Browserdaten löscht, löscht auch den Lernstand."),
+    h("p", { key: "b" }, h("b", null, "Gerät wechseln oder sichern: "),
+      "Unter «Lernstand übertragen» speicherst du deinen Stand als Datei und lädst ihn auf dem anderen Gerät wieder. ",
+      h("button", { className: "linkish", onClick: zuUebertragen }, "So geht’s")),
+    h("p", { key: "c", className: "note tiny" }, "iPhone: Die Seite über «Teilen → Zum Home-Bildschirm» hinzufügen und von dort "
+      + "öffnen. Sonst löscht Safari den Lernstand nach etwa einer Woche ohne Besuch.")];
   const lagerinfo = synced
-    ? h("div", { className: "lagerinfo", role: "note" },
-        h("p", null, h("b", null, "Dein Lernstand "), "wird mit deinem Claude-Konto gespeichert und ist auf allen deinen Geräten gleich."))
-    : h("div", { className: "lagerinfo", role: "note" },
-        h("p", null, h("b", null, "Dein Lernstand bleibt nur in diesem Browser. "),
-          "Es gibt kein Konto und keinen Server, und niemand sonst sieht deinen Fortschritt. Lern deshalb immer im selben "
-          + "Browser und nicht im privaten Fenster. Wer die Browserdaten löscht, löscht auch den Lernstand."),
-        h("p", null, h("b", null, "Gerät wechseln oder sichern: "),
-          "Unter «Lernstand übertragen» speicherst du deinen Stand als Datei und lädst ihn auf dem anderen Gerät wieder. ",
-          h("button", { className: "linkish", onClick: zuUebertragen }, "So geht’s")),
-        h("p", { className: "note tiny" }, "iPhone: Die Seite über «Teilen → Zum Home-Bildschirm» hinzufügen und von dort "
-          + "öffnen. Sonst löscht Safari den Lernstand nach etwa einer Woche ohne Besuch."));
+    ? h("p", { className: "note tiny lagerzeile" }, "Dein Lernstand wird mit deinem Claude-Konto gespeichert.")
+    : h("div", { className: "lagerzeile" },
+        h("p", { className: "note tiny" }, "Dein Lernstand bleibt nur in diesem Browser. ",
+          h("button", { className: "linkish tiny", "aria-expanded": mehrInfo, onClick: () => setMehrInfo(!mehrInfo) },
+            mehrInfo ? "Weniger" : "Mehr dazu")),
+        mehrInfo && h("div", { className: "lagerinfo", role: "note" }, infoText));
   const bar = h("div", { className: "who-bar" },
     h("button", { className: "who-now", "aria-expanded": open, onClick: () => { setOpen(!open); setKill(null); setRen(null); } },
       h("span", { className: "who-lab" }, "Lernende"),
@@ -2981,17 +2657,17 @@ function TrainerRoot() {
       }),
       adding === null
         ? h("button", { className: "btn tiny ghost addp", onClick: () => setAdding("") }, "+ Person hinzufügen")
-        : h("div", { className: "who-edit" },
+        : h(React.Fragment, null, h("div", { className: "who-edit" },
             h("input", { className: "who-input", value: adding, maxLength: 24, autoFocus: true,
               placeholder: "Name", onChange: e => setAdding(e.target.value),
               onKeyDown: e => { if (e.key === "Enter") add(); if (e.key === "Escape") setAdding(null); },
               "aria-label": "Name der neuen Person" }),
             h("button", { className: "btn tiny", onClick: add }, "Anlegen"),
             h("button", { className: "btn tiny ghost", onClick: () => setAdding(null) }, "Abbrechen")),
+            !synced && h("div", { className: "lagerinfo neu", role: "note" }, infoText)),
       h("p", { className: "note tiny" },
-        "Alle lernen denselben Stoff, jede Person mit eigenem Fortschritt und eigenen Einstellungen. "
-        + (synced ? "" : "Alle Profile liegen nur in diesem Browser. ")
-        + "Die Liste ist kein Schutz: Jeder kann jedes Profil öffnen und zurücksetzen.")), lagerinfo);
+        "Jede Person hat ihren eigenen Fortschritt und ihre eigenen Einstellungen."
+        + (synced ? "" : " Alles bleibt in diesem Browser."))), !open && lagerinfo);
 
   // ---------- Lernstand sichern und laden ----------
   const lernstand = () => {
@@ -3183,10 +2859,6 @@ function App() {
           gs.map(g => h("button", { key: g.id, style: style(g), className: "group-dot", onClick: () => toId("g-" + g.id) },
             h("span", { className: "dot" }), g.name)))),
 
-      !query && h("p", { className: "note", style: { marginTop: 14 } },
-        alle.length + " Einträge: " + (alle.length - ergaenzt) + " stehen so bei Rosenberg, "
-        + ergaenzt + " sind übersetzt und ergänzt, weil es das deutsche Wort hier gibt, bei ihm aber keines. "
-        + "Jeder Eintrag führt auf sein deutsches Gegenstück."),
 
       query && h("p", { className: "note", style: { marginTop: 14 } },
         n + " " + (n === 1 ? M.unit[0] : M.unit[1]) + " gefunden"),
@@ -3201,8 +2873,7 @@ function App() {
         h("ul", { className: "list enlist" }, g.shown.map((i, k) => {
           const chips = i.w || [];
           return h("li", { key: g.id + "-" + k, className: "item en" },
-            h("p", { className: "enword" }, i.e,
-              i.neu ? h("span", { className: "ergtag" }, "ergänzt") : null),
+            h("p", { className: "enword" }, i.e),
             h("p", { className: "annot" }, h("span", null, "deutsch: ", i.w.map(w => peekChip(w, peek, setPeek)))),
             i.hw ? h("p", { className: "warum" }, i.hw) : null,
             peek && ITEM[peek] && chips.indexOf(peek) >= 0 ? peekPanel(peek) : null);
