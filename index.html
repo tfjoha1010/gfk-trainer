@@ -134,6 +134,14 @@ h1 { font-size: clamp(30px, 7vw, 46px); line-height: 1.05; margin: 28px 0 10px; 
 .seg button { flex: 1 1 30%; font: inherit; font-size: 13px; line-height: 1.2; border: 0; background: transparent; color: var(--muted); padding: 8px 10px; border-radius: 9px; cursor: pointer; }
 .seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); font-weight: 700; }
 .seg button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.seg button.seg-train { color: var(--ink); font-weight: 700; box-shadow: inset 0 0 0 1.5px var(--ink); }
+.seg button.seg-train[aria-pressed="true"] { box-shadow: none; color: var(--bg); }
+.seg-ico { font-size: 10px; vertical-align: 1px; }
+.lagerinfo { margin: 0 0 14px; padding: 12px 14px; border: 1px solid var(--line); border-left: 3px solid var(--ink);
+  border-radius: 0 12px 12px 0; background: var(--surface); font-size: 14.5px; }
+.lagerinfo p { margin: 0 0 6px; }
+.lagerinfo p:last-child { margin-bottom: 0; }
+.lagerinfo .linkish { font-size: 14.5px; }
 .tools { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .tool.file { position: relative; display: inline-flex; align-items: center; }
 .tool.file input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; pointer-events: none; }
@@ -588,19 +596,19 @@ const { useState, useMemo, useEffect, useRef } = React;
 
 const NEG = [
   { id: "aerger", bereich: "Anders als es sollte", name: "Ärger", sub: "Eine Grenze überschritten", extraLabel: "Eigene Art:", ladder: true, accent: "#C0392B", accentD: "#E0685A",
-    note: "Die Leiter misst die Stärke. Drei Wörter stehen daneben, weil sie sich in der Art unterscheiden: ungeduldig ist Ärger über Tempo, geladen ist zurückgehaltener Ärger, zornig ist gerichteter Ärger über ein Unrecht.",
+    note: "Die Leiter misst die Stärke. ärgerlich und verärgert stehen gleichauf: ärgerlich ist hier die gereizte Stimmung ohne fassbaren Auslöser, verärgert die Reaktion auf etwas Bestimmtes. Im Alltag werden beide oft gleich gebraucht. Drei Wörter stehen daneben, weil sie sich in der Art unterscheiden: ungeduldig ist Ärger über Tempo, geladen ist aufgestauter Ärger, den ich noch nicht zeige, zornig ist gerichteter Ärger über ein Unrecht.",
     items: [
-    { w: "irritiert", d: "Etwas passt mir nicht, ich runzle innerlich die Stirn. Der leiseste Ärger, vorbei, sobald es aufhört." },
-    { w: "genervt", d: "Dasselbe stört zum wiederholten Mal, und meine Geduld wird dünn. Der Ärger kommt aus der Wiederholung, nicht aus der Schwere." },
-    { w: "ärgerlich", d: "Ich bin schnell auf hundert, ohne dass ich einen bestimmten Auslöser nennen müsste. Eine Stimmung, in der ich gerade bin.", vs: "verärgert" },
+    { w: "irritiert", d: "Etwas kommt mir quer und bringt mich kurz aus dem Tritt. Ich runzle innerlich die Stirn, und es vergeht, sobald es aufhört." },
+    { w: "genervt", d: "Dasselbe stört mich zum wiederholten Mal, und ich halte es immer schlechter aus. Nicht die Sache selbst reizt mich, sondern dass sie immer wiederkommt." },
+    { w: "ärgerlich", d: "Ich bin gereizt und schnell auf hundert, ohne einen bestimmten Auslöser nennen zu können. Eine Stimmung, die gerade über allem liegt.", vs: "verärgert" },
     { w: "verärgert", same: true, d: "Etwas Bestimmtes hat mir die Laune verdorben, und ich kann es auf den Punkt benennen: diese Bemerkung, dieser Termin, dieses Versäumnis. Es wurmt mich an dieser einen Sache, nicht überall.", vs: "ärgerlich" },
     { w: "sauer", d: "Ich bin jemandem böse und lasse es ihn spüren, eher kurz angebunden. Umgangssprachlich und meist auf eine Person gemünzt." },
-    { w: "aufgebracht", d: "Ich bin sichtbar erregt: die Stimme wird lauter, ich rede schneller, kann nicht stillsitzen." },
+    { w: "aufgebracht", d: "Ich bin sichtbar erregt: Die Stimme wird lauter, ich rede schneller und gestikuliere." },
     { w: "wütend", d: "Heiss und drängend, ich spüre es im ganzen Körper und will sofort handeln. Impulsiv, nicht durchdacht.", vs: "zornig" },
-    { w: "explosiv", d: "Ich spüre, dass ich gleich platze. Noch halte ich, aber nur mit Mühe und nicht mehr lange." },
-    { w: "ungeduldig", extra: true, d: "Es geht mir zu langsam. Ich will, dass es endlich weitergeht, und das Warten selbst ärgert mich." },
-    { w: "geladen", extra: true, d: "Der Ärger staut sich in mir, nach aussen halte ich ihn noch. Ein kleiner Anlass würde reichen." },
-    { w: "zornig", extra: true, d: "Gerichteter Ärger über ein Unrecht: Das darf so nicht sein. Kälter und beherrschter als Wut, aber nicht schwächer.", vs: "wütend" }
+    { w: "explosiv", d: "Gleich platzt es aus mir heraus. Ich halte mich nur noch mit Mühe zurück, und man sieht es mir an." },
+    { w: "ungeduldig", extra: true, d: "Es geht mir zu langsam. Ich will, dass es endlich weitergeht, und kann das Warten kaum aushalten." },
+    { w: "geladen", extra: true, d: "Seit einer Weile sammelt sich etwas in mir an, das ich nicht zeige. Nach aussen wirke ich gefasst, aber ein kleiner Anlass würde reichen." },
+    { w: "zornig", extra: true, d: "Ein Unrecht empört mich, und mein Groll richtet sich klar dagegen: Das darf so nicht sein. Anders als bei Wut bleibe ich dabei kühl und beherrscht.", vs: "wütend" }
   ]},
   { id: "enttaeuschung", bereich: "Anders als es sollte", name: "Enttäuschung & Verletzung", sub: "Eine Erwartung nicht erfüllt", ladder: false, accent: "#A5581B", accentD: "#D98C4E",
     note: "Keine Leiter: Die ersten vier unterscheiden sich im Auslöser — eine Bilanz, eine nicht erfüllte Erwartung, ein blockierter Weg, ein persönlicher Treffer. Nur verbittert ist eindeutig das Späteste und Festeste.",
@@ -609,59 +617,59 @@ const NEG = [
     { w: "enttäuscht", d: "Ich hatte mich auf etwas Schönes gefreut oder fest damit gerechnet, und es ist nicht gekommen. Je grösser die Vorfreude war, desto schwerer wiegt es.", vs: "frustriert" },
     { w: "frustriert", d: "Ich komme nicht weiter, obwohl ich es immer wieder versuche. Der Weg zum Ziel ist blockiert, darin steckt auch Ärger.", vs: "enttäuscht" },
     { w: "verletzt", d: "Das Verhalten eines anderen hat mich persönlich getroffen, es tut innerlich weh." },
-    { w: "verbittert", d: "Alte Enttäuschungen haben sich zu Groll verhärtet. Nicht mehr an einen Anlass gebunden, sondern dauerhaft eingefärbt." }
+    { w: "verbittert", d: "Was mich früher gekränkt hat, ist zu Groll erstarrt. Er hängt nicht mehr an einem Anlass, sondern färbt seit Langem alles ein." }
   ]},
   { id: "angst", bereich: "Bedrohung", name: "Angst", sub: "Die Gefahr ist da, der Schaden noch nicht", extraLabel: "Daneben:", ladder: true, accent: "#7045AE", accentD: "#A788D8",
-    note: "Die Leiter misst die Stärke. unruhig sitzt daneben, weil es im Körper sitzt und keinen Gegenstand braucht; alarmiert, weil es der plötzliche Moment des Erkennens ist.",
+    note: "Die Leiter misst die Stärke: besorgt bleibt im Kopf, beunruhigt erreicht schon den Körper, ängstlich rechnet mit Gefahr, panisch kann nicht mehr klar denken. unruhig sitzt daneben, weil es keinen Gegenstand braucht und sich als Bewegungsdrang zeigt; alarmiert, weil es der plötzliche Moment des Erkennens ist.",
     items: [
     { w: "besorgt", d: "Meine Gedanken kreisen um etwas, das schiefgehen könnte. Das spielt sich im Kopf ab, der Körper ist nicht beteiligt.", vs: "beunruhigt" },
-    { w: "beunruhigt", d: "Etwas Bestimmtes lässt mich nicht los und stört meine innere Ruhe. Mehr als Nachdenken, noch keine Angst.", vs: ["besorgt", "unruhig"] },
+    { w: "beunruhigt", d: "Etwas Bestimmtes lässt mich nicht los, und es erreicht schon den Körper: ein flaues Gefühl, ich horche immer wieder darauf. Mit echter Gefahr rechne ich noch nicht.", vs: ["besorgt", "unruhig"] },
     { w: "ängstlich", vs: "besorgt", d: "Mir ist eng und mulmig. Ich rechne mit Gefahr, gehe vorsichtig heran und würde am liebsten ausweichen." },
-    { w: "panisch", d: "Die Angst überrollt mich, ich kann nicht mehr klar denken und will nur noch weg." },
+    { w: "panisch", d: "Ein Schrecken überrollt mich, ich kann nicht mehr klar denken und will nur noch weg." },
     { w: "unruhig", extra: true, vs: ["beunruhigt", "angespannt"], d: "Ich kann nicht stillsitzen, bin zappelig und getrieben, ohne sagen zu können wovor. Es sitzt im Körper, nicht im Gedanken." },
     { w: "alarmiert", extra: true, vs: "panisch", d: "Etwas hat mich schlagartig wachgemacht. Ich habe eine Gefahr erkannt und bin bereit zu handeln." }
   ]},
   { id: "schock", bereich: "Bedrohung", name: "Schock", sub: "Schlechte Nachricht trifft ein", ladder: true, accent: "#2A6A8A", accentD: "#6AAACB", extraLabel: "Daneben:",
     note: "Nur bestürzt und schockiert bilden eine Leiter: Bei bestürzt setzt die Fassung aus, bei schockiert zusätzlich das Begreifen. Die vier daneben sind anders geartet — betroffen nimmt Anteil und bleibt dabei gefasst, ist also keine schwächere Bestürzung, sondern ein anderes Gefühl; entsetzt fügt Abscheu hinzu; erstarrt ist der Körper im Moment selbst; verstört das Nachwirken Tage später.", items: [
     { w: "bestürzt", vs: "schockiert", d: "Ich bin aus der Fassung: Ich weiss nicht, was sagen, wohin schauen, und man sieht es mir an. Was mich erschüttert, ist, dass so etwas überhaupt möglich ist." },
-    { w: "schockiert", d: "Ich kann es nicht glauben und will es noch einmal hören. Hier setzt nicht nur die Fassung aus, sondern das Begreifen selbst." },
+    { w: "schockiert", d: "Ich kann es nicht glauben und will es noch einmal hören. Mein Verstand weigert sich, die Nachricht aufzunehmen." },
     { w: "betroffen", extra: true, vs: ["berührt", "bestürzt"], d: "Was geschehen ist, geht mir nahe, und ich nehme Anteil. Mein Blick bleibt bei der Sache oder bei dem, dem es zugestossen ist — ich selbst bleibe gefasst." },
-    { w: "entsetzt", extra: true, vs: "schockiert", d: "Zum Schlag kommt Abscheu: Was ich erfahre, ist für mich nicht nur schlimm, sondern unerträglich. Ich will mich wegdrehen." },
+    { w: "entsetzt", extra: true, vs: "schockiert", d: "Was ich erfahre, ist für mich nicht nur schlimm, sondern unerträglich, und ich empfinde Abscheu. Ich will mich wegdrehen." },
     { w: "erstarrt", extra: true, d: "Ich bin wie eingefroren, der Körper macht nichts mehr: weder Flucht noch Gegenwehr. Das geschieht im Moment selbst." },
-    { w: "verstört", extra: true, vs: "erstarrt", d: "Tage später ist noch etwas in mir durcheinander: Ich schlafe schlecht, bin schreckhaft, komme nicht zurück in den Alltag." }
+    { w: "verstört", extra: true, vs: "erstarrt", d: "Tage später bin ich noch aus dem Lot: Ich schlafe schlecht, bin schreckhaft, finde nicht zurück in den Alltag." }
   ]},
   { id: "stress", bereich: "Zu viel", name: "Stress & Druck", sub: "Zu viel", ladder: false, accent: "#B07008", accentD: "#E0A542",
     note: "Keine Leiter, sondern zwei Achsen: woher der Druck kommt (unter Druck von aussen, gestresst als meine Reaktion) und wie lange er dauert (überwältigt im Moment, überlastet auf Dauer). Nur belastet, überlastet und nervlich am Ende steigern sich wirklich.",
     items: [
     { w: "angespannt", d: "Ich bin innerlich auf Zug, wachsam und bereit, als könnte gleich etwas kommen.", vs: "verspannt" },
-    { w: "verspannt", same: true, d: "Die Anspannung hat sich im Körper festgesetzt: harter Nacken, hochgezogene Schultern, zugebissener Kiefer.", vs: "angespannt" },
+    { w: "verspannt", same: true, d: "Es hat sich im Körper festgesetzt: harter Nacken, hochgezogene Schultern, zugebissener Kiefer. Oft merke ich es erst, wenn es wehtut.", vs: "angespannt" },
     { w: "unter Druck", d: "Von aussen wird etwas von mir erwartet: eine Frist, eine Vorgabe, jemand, der auf ein Ergebnis wartet.", vs: "gestresst" },
     { w: "gestresst", d: "Zu vieles will gleichzeitig erledigt sein, und ich reagiere darauf mit Hetze, Gereiztheit und unklarem Kopf.", vs: ["unter Druck", "überwältigt"] },
     { w: "atemlos", d: "Ich komme nicht nach, das Tempo ist zu hoch. Ein Termin jagt den nächsten, keine Pause dazwischen." },
-    { w: "belastet", vs: "überlastet", d: "Ich trage etwas Schweres mit mir herum, über Wochen oder Monate." },
+    { w: "belastet", vs: "überlastet", d: "Eine Sorge oder Aufgabe trage ich schon seit Wochen mit mir herum, und sie kostet mich laufend Kraft." },
     { w: "überlastet", d: "Es ist dauerhaft mehr, als ich schaffen kann. Kein schlimmer Tag, sondern ein Zustand.", vs: "überwältigt" },
     { w: "überwältigt", d: "Alles kommt auf einmal, und ich weiss in diesem Moment nicht, wo ich anfangen soll.", vs: "überlastet" },
     { w: "nervlich am Ende", d: "Meine Reserven sind aufgebraucht. Schon Kleinigkeiten bringen mich zum Weinen oder zum Explodieren." }
   ]},
   { id: "erschoepfung", bereich: "Energie weg", name: "Erschöpfung", sub: "Energie körperlich weg", ladder: true, accent: "#5E7248", accentD: "#9DB384",
-    note: "müde und ermüdet liegen gleichauf: Der Unterschied ist der Auslöser, nicht die Stärke.",
+    note: "müde und ermüdet liegen gleichauf: Der Unterschied ist der Auslöser, nicht die Stärke. Bei schlapp fehlt die Spannung im Körper, bei matt die Kraft selbst.",
     items: [
     { w: "müde", d: "Es fehlt Schlaf, die Augen fallen zu. Schlaf würde es beheben, und mehr steckt nicht dahinter.", vs: ["ermüdet", "schlapp"] },
     { w: "ermüdet", same: true, d: "Nach einer bestimmten Anstrengung fallen mir die Augen zu: nach dem langen Meeting, nach der Fahrt. Vorher ging es mir gut.", vs: "müde" },
-    { w: "abgespannt", vs: "schlapp", d: "Die Spannung des Tages fällt von mir ab und lässt mich leer zurück. Typisch am Feierabend." },
-    { w: "schlapp", vs: "matt", d: "Kein Zug im Körper, alles fühlt sich zäh an, und Lust habe ich auch keine. Schlaf ändert daran nichts — oft bleibt es nach einem Infekt zurück." },
-    { w: "matt", d: "Kraftlos und schwach wie nach einer Krankheit. Schon Aufstehen kostet mich etwas." },
+    { w: "abgespannt", vs: "schlapp", d: "Nach einem langen Tag fällt alles von mir ab und lässt mich leer und etwas dünnhäutig zurück. Typisch am Feierabend." },
+    { w: "schlapp", vs: "matt", d: "Kein Zug im Körper, alles fühlt sich zäh an, und Lust habe ich auch keine. Schlaf ändert daran nichts." },
+    { w: "matt", d: "Mir fehlt die Kraft, schon Aufstehen kostet Überwindung. Ich fühle mich schwach wie nach einer Krankheit, auch ohne krank zu sein." },
     { w: "ausgelaugt", d: "Über lange Zeit ist mir Kraft entzogen worden. Ein Wochenende reicht nicht mehr, um das aufzufüllen." }
   ]},
   { id: "trauer", bereich: "Energie weg", name: "Traurigkeit", sub: "Verlust, Energie nach innen", extraLabel: "Andere Reichweite:", ladder: true, accent: "#2F52A0", accentD: "#7A9BE0",
-    note: "schwer liegt gleichauf mit bedrückt, es ist dieselbe Schwere im Körper. unglücklich steht daneben, weil es das ganze Leben meint und nicht einen Anlass.",
+    note: "schwer liegt gleichauf mit bedrückt: Bei bedrückt liegt eine bestimmte Sache auf dem Gemüt, bei schwer ist es der ganze Körper, oft ohne erkennbaren Grund. unglücklich steht daneben, weil es das ganze Leben meint und nicht einen Anlass.",
     items: [
     { w: "traurig", d: "Ich habe etwas verloren, und es tut weh. Das Grundgefühl bei einem Verlust.", vs: "bekümmert" },
-    { w: "bekümmert", d: "Mich betrübt etwas, und zugleich sorge ich mich um jemanden. Die Trauer gilt nicht mir selbst, sondern einem anderen.", vs: "traurig" },
-    { w: "bedrückt", vs: "niedergeschlagen", d: "Etwas liegt auf mir und dämpft alles. Es zieht nach unten, ohne dass ich wüsste, wie ich es loswerde." },
-    { w: "schwer", same: true, d: "Alles fühlt sich bleiern an: die Glieder, die Schritte, der Gedanke an morgen. Das Körpergefühl zur Traurigkeit." },
-    { w: "niedergeschlagen", d: "Ein Rückschlag hat mir die Kraft genommen. Ich bin nicht nur traurig, sondern auch mutlos." },
-    { w: "deprimiert", d: "Die Schwere hält an, und ich sehe wenig, was sie ändern könnte. Alltagssprachlich gemeint, nicht als Diagnose." },
+    { w: "bekümmert", d: "Mich betrübt etwas, und zugleich sorge ich mich um jemanden. Der Schmerz gilt weniger mir selbst als einem anderen.", vs: "traurig" },
+    { w: "bedrückt", vs: "niedergeschlagen", d: "Eine bestimmte Sache liegt mir auf dem Gemüt und dämpft alles andere. Ich weiss, woran es liegt, werde es aber nicht los." },
+    { w: "schwer", same: true, d: "Mein ganzer Körper fühlt sich bleiern an: die Glieder, die Schritte, der Gedanke an morgen. Woran es liegt, kann ich oft gar nicht sagen." },
+    { w: "niedergeschlagen", d: "Ein Rückschlag hat mir die Kraft genommen. Mir fehlt der Mut, es noch einmal zu versuchen." },
+    { w: "deprimiert", d: "Seit Wochen ist alles grau, und ich sehe wenig, was das ändern könnte. Alltagssprachlich gemeint, nicht als Diagnose." },
     { w: "elend", d: "Mir geht es rundum schlecht, körperlich und seelisch zugleich." },
     { w: "unglücklich", extra: true, d: "Mein Leben als Ganzes fühlt sich gerade nicht gut an, nicht bloss dieser eine Tag." }
   ]},
@@ -672,27 +680,27 @@ const NEG = [
     { w: "verzweifelt", d: "Ich sehe keinen Ausweg mehr, die Hoffnung bricht weg. Innerlich ist das oft sehr laut, nicht still." }
   ]},
   { id: "leere", bereich: "Energie weg", name: "Leere & Rückzug", sub: "Kontakt reduziert", extraLabel: "Daneben:", ladder: true, accent: "#6B737F", accentD: "#A9B0BA",
-    note: "Die Leiter misst, wie weit ich weg bin. gelangweilt und abwesend stehen daneben: Bei beiden ist Energie da, sie ist nur nicht hier.",
+    note: "Die Leiter misst, wie weit ich weg bin. leer ist das gespürte Fehlen von allem, leblos das blosse Funktionieren ohne Regung. gelangweilt und abwesend stehen daneben: Bei beiden ist Energie da, sie ist nur nicht hier.",
     items: [
     { w: "antriebsarm", vs: "gelangweilt", d: "Ich weiss, was zu tun wäre, und bringe mich nicht dazu. Der Wille fehlt, nicht die Zeit." },
     { w: "teilnahmslos", d: "Was um mich herum geschieht, berührt mich nicht. Ich nehme es wahr, und es ist mir gleich.", vs: "leer" },
-    { w: "leer", d: "In mir ist nichts: kein Schmerz, keine Freude, nur ein Vakuum.", vs: "teilnahmslos" },
-    { w: "leblos", d: "Jede Lebendigkeit ist weg, ich funktioniere nur noch." },
+    { w: "leer", d: "In mir ist ein Hohlraum: kein Schmerz, keine Freude, nichts, wonach ich mich sehne. Ich spüre vor allem das Fehlen selbst.", vs: "teilnahmslos" },
+    { w: "leblos", d: "Nach aussen erledige ich noch, was ansteht, aber wie ein Automat. Selbst mein Körper fühlt sich taub an." },
     { w: "gelangweilt", extra: true, d: "Ich hätte Energie, aber nichts reizt mich. Die Zeit zieht sich." },
     { w: "abwesend", extra: true, vs: "teilnahmslos", d: "Körperlich bin ich hier, mit den Gedanken ganz woanders." }
   ]},
   { id: "unsicherheit", bereich: "Ohne Halt", name: "Unsicherheit & Orientierung", sub: "Halt und Klarheit fehlen", ladder: false, accent: "#1B7E70", accentD: "#5CC0B0",
     note: "Keine Intensitätsleiter: Die Gefühle unterscheiden sich in der Art, nicht in der Stärke.", items: [
     { w: "unwohl", d: "Ich fühle mich nicht gut in meiner Haut, diffus und eher körperlich, ohne benennen zu können, was fehlt.", vs: "unbehaglich" },
-    { w: "unbehaglich", d: "Diese Situation fühlt sich nicht stimmig an, meist im Kontakt mit anderen. Ich würde lieber gehen.", vs: "unwohl" },
+    { w: "unbehaglich", d: "Eine Situation fühlt sich nicht stimmig an, meist im Kontakt mit anderen. Ich würde lieber gehen.", vs: "unwohl" },
     { w: "unsicher", d: "Ich traue meiner Einschätzung oder mir selbst nicht. Auch als Grundhaltung, ohne dass etwas passiert wäre.", vs: "verunsichert" },
-    { w: "verunsichert", d: "Etwas hat mich ins Wanken gebracht. Vorher war ich sicher, jetzt zweifle ich.", vs: "unsicher" },
+    { w: "verunsichert", d: "Etwas hat mich ins Wanken gebracht. Bis eben habe ich nicht gezweifelt, jetzt schon.", vs: "unsicher" },
     { w: "zögerlich", d: "Ich schiebe auf und gehe langsam heran. Man sieht es daran, dass ich nicht losfange.", vs: "gehemmt" },
-    { w: "gehemmt", d: "Etwas in mir bremst mich, obwohl ich wollte. Oft Scham oder die Blicke der anderen.", vs: "zögerlich" },
+    { w: "gehemmt", d: "Etwas in mir bremst mich, obwohl ich möchte. Oft ist es Scham oder sind es die Blicke der anderen.", vs: "zögerlich" },
     { w: "verwirrt", d: "Ich verstehe nicht, was gemeint ist oder was gerade geschieht. Ein Problem des Kopfes.", vs: "durcheinander" },
-    { w: "durcheinander", d: "Gedanken und Gefühle liegen quer, nichts ist sortiert. Nicht nur unverstanden, sondern auch emotional ungeordnet.", vs: "verwirrt" },
+    { w: "durcheinander", d: "Gedanken und Gefühle liegen quer, nichts ist sortiert. Es betrifft nicht nur den Verstand, auch innerlich ist alles ungeordnet.", vs: "verwirrt" },
     { w: "zerrissen", d: "Zwei Seiten in mir ziehen in verschiedene Richtungen, und beide haben recht." },
-    { w: "verloren", vs: "einsam", d: "Ich weiss nicht, wohin, und niemand hält mich. Orientierung und Halt fehlen zugleich." }
+    { w: "verloren", vs: "einsam", d: "Ich weiss nicht, wohin, und niemand hält mich. Mir fehlt die Richtung und jemand, an dem ich mich festhalten kann." }
   ]},
   { id: "beziehung", bereich: "Ohne Halt", name: "Beziehung & Abwehr", sub: "Verbindung zu anderen", ladder: false, accent: "#A33567", accentD: "#E07AA6", items: [
     { w: "einsam", d: "Mir fehlt Verbindung. Das kann ich auch mitten unter Menschen fühlen." },
@@ -704,35 +712,35 @@ const NEG = [
 
 const POS = [
   { id: "freude", bereich: "Energie steigt", name: "Freude", sub: "Es geht mir gut", ladder: false, accent: "#B57600", accentD: "#F0B94E",
-    note: "Keine Leiter: Die Unterschiede liegen im Anlass (froh, erfreut), in der Sichtbarkeit (fröhlich, strahlend), im Auslöser (lustig, entzückt), in der Zeit (freudig) und im Sprachregister (hocherfreut). Nur ausgelassen und jubelnd sind eindeutig die lautesten.",
+    note: "Keine Leiter: Die Unterschiede liegen im Anlass (froh über einen Stand der Dinge, erfreut über etwas, das gerade geschehen ist), in der Sichtbarkeit (fröhlich, strahlend), im Auslöser (lustig, entzückt), in der Zeit (freudig, hier im Sinn von freudiger Erwartung) und im Sprachregister (hocherfreut). Nur ausgelassen und jubelnd sind eindeutig die lautesten.",
     items: [
-    { w: "gut gelaunt", d: "Mir ist leicht ums Herz, ohne dass etwas Bestimmtes passiert wäre." },
-    { w: "froh", d: "Mir ist wohl, oft mit einem Anklang von Erleichterung darüber, dass es so gekommen ist.", vs: "erfreut" },
+    { w: "gut gelaunt", d: "Ich bin in guter Stimmung, ohne dass etwas Bestimmtes passiert wäre, und das färbt auf den ganzen Tag ab." },
+    { w: "froh", d: "Mir ist wohl, weil etwas gut ausgegangen ist oder so steht, wie ich es mir gewünscht habe.", vs: "erfreut" },
     { w: "erfreut", d: "Eine Nachricht oder eine Geste hat mir gerade gutgetan. Es gibt einen klaren Anlass dafür.", vs: "froh" },
     { w: "heiter", d: "Eine helle, ruhige Grundstimmung mit einem Anflug von Humor; nichts wiegt gerade schwer.", vs: ["fröhlich", "gut gelaunt"] },
-    { w: "fröhlich", d: "Die Freude ist mir anzusehen: Ich lächle, rede gern, bin aufgeweckt.", vs: "heiter" },
+    { w: "fröhlich", d: "Meine gute Stimmung ist mir anzusehen: Ich lächle, rede gern, bin aufgeweckt.", vs: "heiter" },
     { w: "vergnügt", d: "Mir macht Spass, was ich gerade tue, und ich gehe ganz darin auf.", vs: "lustig" },
     { w: "lustig", d: "Es ist komisch, ich lache. Humor ist im Spiel.", vs: "vergnügt" },
-    { w: "freudig", d: "Erwartungsvolle Stimmung, die sich auf ein Ereignis richtet, das erst noch kommt." },
+    { w: "freudig", d: "Etwas Schönes steht bevor, und ich male es mir jetzt schon gern aus." },
     { w: "hocherfreut", d: "Eine Zusage, ein Entscheid, eine Einladung: Die Nachricht ist richtig gut, und ich sage das deutlich — in gewählter Sprache und ohne die Haltung zu verlieren." },
-    { w: "strahlend", vs: "fröhlich", d: "Die Freude steht mir im Gesicht, man sieht sie von weitem." },
+    { w: "strahlend", vs: "fröhlich", d: "Mein Gesicht leuchtet, man sieht es mir von weitem an." },
     { w: "entzückt", d: "Etwas Schönes oder Liebliches rührt mich an: ein Kind, eine Melodie, ein Anblick." },
     { w: "ausgelassen", d: "Übermütig und ohne Bremse, meist mit anderen zusammen." },
-    { w: "jubelnd", vs: "ausgelassen", d: "Die Freude bricht laut heraus, wie bei einem Sieg." }
+    { w: "jubelnd", vs: "ausgelassen", d: "Es bricht laut aus mir heraus, ich reisse die Arme hoch, wie bei einem Sieg." }
   ]},
   { id: "glueck", bereich: "Nach innen", name: "Glück & Erfüllung", sub: "Tiefe, nach innen", extraLabel: "Eigene Art:", ladder: true, accent: "#B8452C", accentD: "#E88A72",
-    note: "Nur glücklich und selig bilden eine Leiter, selig ist das wunschlose Äusserste. Die zwei daneben sind anders geartet: zufrieden ist ein kühles Urteil und kein Gefühl im Körper, erfüllt zielt auf Sinn und kann mit Müdigkeit oder Trauer zusammengehen.",
+    note: "Nur glücklich und selig bilden eine Leiter, selig ist das wunschlose Äusserste. Die zwei daneben sind anders geartet: zufrieden ist ein ruhiges Einverstandensein nach einer Bilanz, eher Abschluss als Hochgefühl; erfüllt zielt auf Sinn und kann mit Müdigkeit oder Trauer zusammengehen.",
     items: [
-    { w: "glücklich", vs: ["selig", "erfüllt", "zufrieden"], d: "Ein warmes, weites Gefühl, das ich im Körper spüre. Es braucht keinen Abgleich mit einer Erwartung — es kann mich überkommen, womit ich nie gerechnet hätte.", opp: ["unglücklich"] },
+    { w: "glücklich", vs: ["selig", "erfüllt", "zufrieden"], d: "Ein warmes, weites Gefühl, das ich im Körper spüre. Es kann mich auch überkommen, ohne dass ich etwas Bestimmtes erwartet hätte.", opp: ["unglücklich"] },
     { w: "selig", d: "Vollkommen und wunschlos, fast entrückt. Mehr brauche ich im Moment nicht." },
-    { w: "zufrieden", extra: true, vs: "erfüllt", d: "Ich ziehe Bilanz, und sie stimmt: Was ist, entspricht dem, was ich wollte. Ein Urteil, das ich fälle, kein Gefühl, das ich spüre.", opp: ["unzufrieden"] },
+    { w: "zufrieden", extra: true, vs: "erfüllt", d: "Ich ziehe Bilanz, und sie stimmt: Was ist, entspricht dem, was ich wollte. Ein ruhiges Einverstandensein, eher Abschluss als Hochgefühl.", opp: ["unzufrieden"] },
     { w: "erfüllt", extra: true, d: "Ich habe etwas gelebt, das für mich zählt. Dabei kann ich zugleich müde oder sogar traurig sein — es geht um Sinn, nicht um Hochstimmung." }
   ]},
   { id: "begeisterung", bereich: "Energie steigt", name: "Begeisterung", sub: "Energie auf eine Sache gerichtet", extraLabel: "Daneben:", ladder: true, accent: "#B72E63", accentD: "#EC7AA6",
     note: "fasziniert steht daneben, weil es die gefangene Aufmerksamkeit meint; beflügelt, weil es die Wirkung auf meine Kraft beschreibt.",
     items: [
-    { w: "angeregt", vs: "inspiriert", d: "Ein Gespräch oder ein Gedanke hat etwas in Gang gesetzt, mir fällt viel ein." },
-    { w: "begeistert", d: "Ich bin von einer Sache eingenommen, Freude und Energie fliessen dort hinein.", vs: "enthusiastisch" },
+    { w: "angeregt", vs: "inspiriert", d: "Ein Gespräch oder ein Gedanke hat meinen Kopf in Bewegung gesetzt; ich denke lebhaft mit und weiter." },
+    { w: "begeistert", d: "Eine Sache hat mich gepackt, und ich stecke mit Herz und Kraft hinein.", vs: "enthusiastisch" },
     { w: "enthusiastisch", d: "Mein Feuer schwappt über: Ich will andere anstecken und mitziehen.", vs: "begeistert" },
     { w: "berauscht", d: "Wie trunken vor Freude, die Kontrolle lässt etwas nach." },
     { w: "fasziniert", extra: true, vs: "gebannt", d: "Etwas hält meine Aufmerksamkeit fest, ich kann nicht wegschauen." },
@@ -742,15 +750,15 @@ const POS = [
     note: "Keine Leiter: neugierig ist offen und ohne Ziel, gespannt ist auf einen Ausgang gerichtet, aufgeregt ist die körperliche Seite davon.",
     items: [
     { w: "neugierig", vs: "gespannt", d: "Ich will wissen, wie es ist, und schaue offen hin, ohne festes Ziel." },
-    { w: "gespannt", d: "Meine Aufmerksamkeit liegt auf einem Ausgang, den ich noch nicht kenne.", opp: ["angespannt"] },
+    { w: "gespannt", d: "Ich fiebere einem Ergebnis entgegen, das ich noch nicht kenne.", opp: ["angespannt"] },
     { w: "aufgeregt", vs: "gespannt", d: "Es kribbelt, der Puls geht schneller. Nervosität, aber freudige.", opp: ["angespannt"] }
   ]},
   { id: "zuversicht", bereich: "Nach vorne", name: "Zuversicht", sub: "Blick in die Zukunft", extraLabel: "Haltung:", ladder: true, accent: "#2E78AE", accentD: "#72B6E6",
-    note: "Die Leiter misst, wie sicher ich mir bin. optimistisch steht daneben: Es ist eine Grundhaltung, kein Urteil über diesen Fall.",
+    note: "Die Leiter misst, wie sicher ich mir bin. optimistisch steht daneben: Es ist eine Grundhaltung, kein Urteil über einen bestimmten Fall.",
     items: [
     { w: "hoffnungsvoll", vs: "zuversichtlich", d: "Es könnte gut werden. Ich wünsche es mir, sicher bin ich nicht." },
     { w: "zuversichtlich", d: "Ich rechne damit, dass es gut wird, und habe Gründe dafür, etwa Vertrauen in mein Können.", vs: "optimistisch" },
-    { w: "optimistisch", extra: true, d: "Ich gehe grundsätzlich davon aus, dass Dinge gut ausgehen. Eine Haltung, kein Urteil über diesen Fall.", vs: "zuversichtlich" }
+    { w: "optimistisch", extra: true, d: "Ich gehe grundsätzlich davon aus, dass Dinge gut ausgehen. Eine Haltung, kein Urteil über einen bestimmten Fall.", vs: "zuversichtlich" }
   ]},
   { id: "energie", bereich: "Ganz da", name: "Energie & Lebendigkeit", sub: "Körperlich da", ladder: false,
     note: "Keine Leiter: erfrischt und belebt sagen, dass mich etwas angestossen hat; lebendig und aktiv, wie ich gerade bin; energievoll, wie lange ich könnte; kraftvoll, wie viel ich gegen Widerstand aufbringe.", accent: "#3B8736", accentD: "#7FCB76", items: [
@@ -758,15 +766,15 @@ const POS = [
     { w: "munter", vs: "wach", d: "Ausgeschlafen und gut aufgelegt, in Bewegung — oft am Morgen." },
     { w: "belebt", d: "Etwas hat mich in Schwung gebracht: ein Spaziergang, kaltes Wasser, ein Gespräch.", vs: "lebendig" },
     { w: "lebendig", d: "Ich spüre mich, alles ist wach und nah; nichts läuft nebenher.", vs: "belebt", opp: ["leblos"] },
-    { w: "aktiv", d: "Ich habe Lust zu tun und packe an." },
+    { w: "aktiv", d: "Ich bin in Bewegung und tue etwas, statt abzuwarten." },
     { w: "energievoll", d: "Ich könnte den ganzen Tag weitermachen und hätte Lust, mehrere Sachen anzufangen. Es geht um die Menge, nicht um Widerstand.", vs: "kraftvoll" },
     { w: "kraftvoll", d: "Ich traue mir zu, etwas Schweres zu bewegen oder mich gegen Widerstand zu behaupten. Ohne etwas, das sich mir entgegenstellt, zeigt es sich nicht.", vs: "energievoll" }
   ]},
   { id: "klarheit", bereich: "Ganz da", name: "Klarheit & Präsenz", sub: "Geistig da", ladder: false, accent: "#1C7C91", accentD: "#63C0D3",
     note: "Keine Intensitätsleiter: Die Gefühle unterscheiden sich in der Art.", items: [
     { w: "aufmerksam", d: "Ich bin bewusst bei einer Sache oder einem Menschen und bekomme mit, was dort geschieht.", vs: "wach" },
-    { w: "wach", d: "Geistig präsent und ansprechbar, ohne auf etwas Bestimmtes gerichtet zu sein.", vs: ["aufmerksam", "hellwach"] },
-    { w: "hellwach", d: "Ganz da und scharf, ich bekomme jede Nuance mit." },
+    { w: "wach", d: "Mein Geist ist da und ansprechbar, ohne auf etwas Bestimmtes gerichtet zu sein.", vs: ["aufmerksam", "hellwach"] },
+    { w: "hellwach", d: "Meine Sinne sind geschärft, mir entgeht nicht die kleinste Kleinigkeit." },
     { w: "klar", vs: "zentriert", d: "Meine Gedanken sind sortiert, ich weiss, was ich denke und was ich will.", opp: ["verwirrt"] },
     { w: "zentriert", vs: "gelassen", d: "Ich bin in meiner Mitte und bleibe es, auch wenn von aussen daran gerüttelt wird." }
   ]},
@@ -774,23 +782,23 @@ const POS = [
     note: "Die Reihenfolge ist ein Ablauf, keine Steigerung: Impuls, Wille, Einsatz, Entscheidung.", items: [
     { w: "inspiriert", d: "Mir kommen Ideen, es drängt mich, etwas zu machen." },
     { w: "motiviert", d: "Ich habe Lust oder einen guten Grund, das jetzt anzugehen.", vs: "engagiert" },
-    { w: "engagiert", d: "Ich setze mich mit Herz dafür ein, über längere Zeit.", vs: "motiviert" },
+    { w: "engagiert", d: "Ich setze mich mit Herz für eine Sache ein, und das über längere Zeit.", vs: "motiviert" },
     { w: "entschlossen", d: "Die Entscheidung ist gefallen, ich zögere nicht mehr.", opp: ["zögerlich", "zerrissen"] }
   ]},
   { id: "selbstvertrauen", bereich: "Nach vorne", name: "Selbstvertrauen", sub: "Vertrauen in mich", ladder: false, accent: "#8A3FA0", accentD: "#C98BDB", items: [
-    { w: "selbstsicher", d: "Ich traue mir zu, was ansteht, und trete entsprechend auf.", opp: ["unsicher"] },
-    { w: "stolz", vs: "selbstsicher", d: "Freude über etwas Geleistetes, meines oder das von jemandem, der mir nahesteht." },
+    { w: "selbstsicher", d: "Ich gehe mit festem Auftreten auf das zu, was ansteht; an meinen Fähigkeiten zweifle ich nicht.", opp: ["unsicher"] },
+    { w: "stolz", vs: "selbstsicher", d: "Ich richte mich innerlich auf, weil etwas gelungen ist: mir selbst oder jemandem, der mir nahesteht." },
     { w: "mutig", vs: "entschlossen", d: "Ich tue es, obwohl ich Angst habe. Die Angst ist da, aber sie entscheidet nicht." }
   ]},
   { id: "ruhe", bereich: "Nach innen", name: "Ruhe & Entspannung", sub: "Gegenstück zu Stress", ladder: false, accent: "#3D6C9E", accentD: "#8AB0DA",
-    note: "Keine Steigerung, eher von momentan nach tief.", items: [
+    note: "Keine Steigerung, eher von momentan nach tief. gelassen nimmt an, was kommt; ausgeglichen beschreibt die Stimmungslage über längere Zeit.", items: [
     { w: "ruhig", d: "In mir ist es still, nichts drängt.", vs: "beruhigt", opp: ["unruhig"] },
     { w: "beruhigt", d: "Vorher war ich aufgewühlt, jetzt hat sich das gelegt.", vs: "ruhig", opp: ["beunruhigt"] },
-    { w: "entspannt", d: "Die Muskeln werden weich, der Kopf hört auf zu rattern, ich kann loslassen.", opp: ["angespannt"] },
+    { w: "entspannt", d: "Die Muskeln werden weich, der Kopf hört auf zu rattern, ich kann abschalten.", opp: ["angespannt"] },
     { w: "locker", vs: "entspannt", d: "Unverkrampft, auch im Umgang mit anderen. Ich muss mich nicht zusammennehmen." },
-    { w: "gelassen", d: "Es bringt mich nicht aus der Fassung, auch wenn es schwierig wird. Eine Haltung, keine Stimmung.", vs: "ausgeglichen" },
+    { w: "gelassen", d: "Ich nehme, was kommt, ohne mich dagegen zu stemmen, auch wenn es schwierig wird. Eine Haltung, keine Stimmung.", vs: "ausgeglichen" },
     { w: "ausgeglichen", d: "Meine Stimmungen halten sich über längere Zeit die Waage.", vs: "gelassen" },
-    { w: "friedlich", vs: "ruhig", d: "Ruhe und Einklang zugleich: mit mir, mit anderen, mit der Umgebung." }
+    { w: "friedlich", vs: "ruhig", d: "In mir und um mich herum ist Einklang: mit mir, mit anderen, mit der Umgebung. Nichts steht gegeneinander." }
   ]},
   { id: "leichtigkeit", bereich: "Nach innen", name: "Erleichterung & Leichtigkeit", sub: "Eine Last ist weg", ladder: false, accent: "#23876F", accentD: "#7FD6C2",
     note: "Keine Leiter, sondern drei verschiedene Fragen: Ist eine Befürchtung vorbei (erleichtert), trage ich wirklich weniger (entlastet), oder ist eine Einschränkung weg (befreit)? leicht und beschwingt sagen, wie der Körper sich anfühlt; unbeschwert, unbekümmert und sorglos, wie die Grundstimmung ist.", items: [
@@ -806,13 +814,13 @@ const POS = [
   { id: "sicherheit", bereich: "Zu anderen", name: "Sicherheit & Geborgenheit", sub: "Gehalten sein", ladder: false, accent: "#525C8E", accentD: "#A2AAD6", items: [
     { w: "sicher", vs: "geschützt", d: "Ich nehme keine Bedrohung wahr und muss mich nicht wappnen.", opp: ["unsicher"] },
     { w: "geschützt", d: "Ich spüre, dass zwischen mir und der Gefahr etwas steht, und kann mich deshalb lockern.", vs: "behütet" },
-    { w: "behütet", d: "Jemand sorgt fürsorglich für mich, so wie man für ein Kind sorgt.", vs: "geschützt" },
+    { w: "behütet", d: "Jemand wacht über mich und sorgt für mich, so wie man es bei einem Kind tut.", vs: "geschützt" },
     { w: "getragen", vs: "behütet", d: "Andere halten mich mit, ich muss das nicht allein stemmen." },
     { w: "behaglich", vs: "geborgen", d: "Ich fühle mich wohlig in meiner Umgebung: warm, vertraut, gemütlich.", opp: ["unbehaglich"] }
   ]},
   { id: "verbundenheit", bereich: "Zu anderen", name: "Verbundenheit & Berührtsein", sub: "Herz", ladder: false, accent: "#AE3450", accentD: "#E58399", extraLabel: "Haltungen:",
     note: "Keine Leiter: berührt ist die Grundform. Von dort zweigt es in zwei Richtungen ab — gerührt ins Zärtliche, bewegt ins Tiefe und Nachhallende. Die übrigen sind Haltungen gegenüber anderen.", items: [
-    { w: "berührt", d: "Etwas dringt zu mir durch und macht kurz still in mir. Ob es zärtlich oder schwer war, sagt das Wort noch nicht.", vs: "bewegt" },
+    { w: "berührt", d: "Etwas dringt zu mir durch und macht kurz still in mir. Ob es zärtlich war oder schmerzlich, bleibt dabei unbestimmt.", vs: "bewegt" },
     { w: "bewegt", d: "Es hat mich innerlich aufgewühlt und wirkt nach. Ich gehe anders aus der Situation heraus, als ich hineingegangen bin, und es kann auch schwer sein, nicht nur warm.", vs: "gerührt" },
     { w: "gerührt", d: "Mir wird warm und weich ums Herz, ein Kloss im Hals, vielleicht feuchte Augen. Ausgelöst von Zuwendung oder einer Geste, die mir nahegeht.", vs: "berührt" },
     { w: "liebevoll", extra: true, vs: "dankbar", d: "Ich empfinde Zuneigung und Wärme für jemanden und zeige sie auch." },
@@ -825,9 +833,9 @@ const POS = [
 const B1 = "Körper, Sicherheit, Orientierung", B2 = "Beziehung", B3 = "Selbst", B4 = "Entfaltung & Sinn", B5 = "Lebensqualität";
 const NEEDS = [
   { id: "koerper", bereich: B1, name: "Körper & Lebenserhaltung", sub: "Grundversorgung", accent: "#4E7F3A", accentD: "#8CC273", items: [
-    { w: "Nahrung", d: "Essen, Trinken und Luft — dass mein Körper bekommt, was er zum Leben braucht." },
-    { w: "Gesundheit", d: "Mein Körper funktioniert, nichts tut weh, nichts schränkt mich ein. Ein Zustand über längere Zeit, nicht ein guter Tag." },
-    { w: "Bewegung", d: "Mein Körper will raus und etwas tun, statt den ganzen Tag zu sitzen." },
+    { w: "Nahrung", d: "Essen und Trinken, regelmässig und in ausreichender Menge, damit ich satt bin und durch den Tag komme." },
+    { w: "Gesundheit", d: "Alles an mir funktioniert, nichts tut weh, nichts schränkt mich ein. Ein Zustand über längere Zeit, nicht ein guter Tag." },
+    { w: "Bewegung", d: "Ich will mich regen, raus und etwas tun, statt den ganzen Tag zu sitzen." },
     { w: "Ruhe", d: "Es soll still sein und wenig Betrieb um mich herum: keine Reize, keine Ansprüche, niemand, der gerade etwas von mir will. Gemeint ist die Umgebung, nicht das Nachlassen der Spannung in mir.", vs: "Entspannung" },
     { w: "Entspannung", d: "Was sich in mir zusammengezogen hat, darf sich lösen. Das geschieht in mir, unabhängig davon, wie laut es um mich herum ist.", vs: "Ruhe" },
     { w: "Kraft", d: "Ich bringe auf, was ansteht, und muss nicht auf Reserve laufen." }
@@ -847,34 +855,34 @@ const NEEDS = [
     { w: "Kontinuität", d: "Was da ist, bleibt bestehen; es wird nicht ständig alles neu und anders." },
     { w: "Verbindlichkeit", d: "Eine Zusage gilt. Es geht um das Versprechen selbst, noch nicht um die Erfahrung damit.", vs: "Verlässlichkeit" },
     { w: "Verlässlichkeit", d: "Ich kann darauf zählen, dass Zugesagtes eingehalten wird, weil es schon oft so war.", vs: "Verbindlichkeit" },
-    { w: "Vertrauen", d: "Ich kann mich öffnen und muss nicht kontrollieren. Es wächst meist aus Erfahrung und muss nicht abgesichert werden." }
+    { w: "Vertrauen", d: "Ich kann mich öffnen und muss weder kontrollieren noch mich absichern. Ich gehe auf jemanden zu, auch ohne Garantie." }
   ]},
   { id: "gesehen", bereich: B2, name: "Gesehen werden & Wertschätzung", sub: "Wahrnehmen, annehmen, würdigen", accent: "#B23A48", accentD: "#E8828E",
     stages: ["Wahrnehmen", "Annehmen", "Würdigen"],
     note: "Drei Stufen: zuerst wahrnehmen, dann annehmen, dann würdigen. Vorsicht beim Wort Wertschätzung: „schätzen“ heisst hier nicht abschätzen, sondern jemanden gern haben — gemessen wird dort gar nichts. Das Messen steckt im anderen Wort, denn an-erkennen heisst, etwas als gültig erkennen.", items: [
     { w: "Aufmerksamkeit (Zuwendung)", stage: "Wahrnehmen", d: "Jemand legt alles andere weg und ist für eine Weile ganz bei mir." },
     { w: "Wahrgenommen werden", stage: "Wahrnehmen", d: "Man bemerkt, dass ich da bin, und übergeht mich nicht. Es geht ums Bemerken, noch nicht darum, erkannt zu sein.", vs: "Gesehen werden" },
-    { w: "Gesehen werden", stage: "Wahrnehmen", d: "Jemand erkennt, wie es mir wirklich geht und wer ich bin — nicht nur die Oberfläche.", vs: "Wahrgenommen werden" },
+    { w: "Gesehen werden", stage: "Wahrnehmen", d: "Jemand merkt, wie es mir wirklich geht und wer ich bin, und schaut nicht nur auf die Oberfläche.", vs: "Wahrgenommen werden" },
     { w: "Gehört werden", stage: "Wahrnehmen", d: "Was ich sage, kommt an und wird aufgenommen, statt an meinem Gegenüber abzuprallen." },
     { w: "Verständnis", stage: "Wahrnehmen", d: "Jemand kann nachvollziehen, warum ich so fühle oder handle, ohne mir zustimmen zu müssen.", vs: "Verstehen" },
     { w: "Akzeptanz", stage: "Annehmen", d: "Eine einzelne Sache an mir — eine Entscheidung, eine Grenze, eine Eigenschaft — wird nicht länger in Frage gestellt. Man versucht nicht mehr, sie mir auszureden.", vs: ["Angenommen sein", "Toleranz"] },
     { w: "Angenommen sein", stage: "Annehmen", d: "Ich bin als ganzer Mensch willkommen, auch mit den Seiten, die ich selbst an mir nicht mag. Das kann mir nur jemand geben, dem ich etwas bedeute.", vs: "Akzeptanz" },
     { w: "Anerkennung", stage: "Würdigen", d: "Jemand stellt fest, dass meine Leistung zählt, und sagt es. Es gibt einen Massstab, an dem gemessen wird — ich kann es mir verdienen, auch bei jemandem, der mich nicht mag.", vs: "Wertschätzung" },
-    { w: "Wertschätzung", stage: "Würdigen", d: "Ich bin jemandem wichtig, so wie ich bin, und er lässt mich das spüren. Es gibt keinen Massstab und nichts zu verdienen.", vs: "Anerkennung" }
+    { w: "Wertschätzung", stage: "Würdigen", d: "Jemand hat mich gern, so wie ich bin, und lässt es mich spüren. Es gibt keinen Massstab und nichts zu verdienen.", vs: "Anerkennung" }
   ]},
   { id: "naehe", bereich: B2, name: "Nähe & Verbindung", sub: "Mit anderen sein", accent: "#A8326E", accentD: "#E67FB0", items: [
     { w: "Kontakt", d: "Überhaupt eine Begegnung mit jemandem: ein Gespräch, ein Treffen, ein Anruf." },
     { w: "Austausch", d: "Gedanken und Erfahrungen gehen hin und her, nicht nur in eine Richtung." },
     { w: "Verbindung", d: "Zwischen mir und jemandem besteht etwas, auch über Distanz und ohne Worte.", vs: "Nähe" },
     { w: "Nähe", d: "Der Abstand zu jemandem ist klein, körperlich oder emotional.", vs: "Verbindung" },
-    { w: "Wärme", d: "Der Umgang ist herzlich und freundlich, nicht bloss sachlich korrekt." },
+    { w: "Wärme", d: "Es geht herzlich und freundlich zu, nicht bloss sachlich korrekt." },
     { w: "Intimität", d: "Ich zeige jemandem, was ich sonst für mich behalte, und teile Verletzliches." },
     { w: "Liebe", d: "Tiefe Zuneigung zu einem Menschen, in beide Richtungen: geben und empfangen." }
   ]},
   { id: "zugehoerigkeit", bereich: B2, name: "Zugehörigkeit & Teilhabe", sub: "Teil von etwas sein", accent: "#B85A2E", accentD: "#EB9A6F", items: [
-    { w: "Dazugehören", d: "Ich erlebe mich in diesem Moment als Teil der Runde, nicht als aussen stehend.", vs: "Zugehörigkeit" },
+    { w: "Dazugehören", d: "Ich erlebe mich gerade als einer von ihnen, mitten in der Runde statt am Rand.", vs: "Zugehörigkeit" },
     { w: "Zugehörigkeit", d: "Ich habe einen festen Platz in einer Gruppe, auch wenn ich einmal fehle.", vs: "Dazugehören" },
-    { w: "Gemeinschaft", d: "Ich teile mit anderen einen Alltag oder ein Vorhaben. Wir sind aufeinander bezogen, nicht bloss nebeneinander." },
+    { w: "Gemeinschaft", d: "Mit anderen zusammen trage ich einen Alltag oder ein Vorhaben. Wir sind aufeinander bezogen, nicht bloss nebeneinander." },
     { w: "Einbezogen werden", d: "Andere holen mich von sich aus dazu und fragen mich, bevor entschieden wird.", vs: "Teilnehmen" },
     { w: "Teilnehmen", d: "Ich bin dabei und mache mit, statt zuzuschauen. Der Schritt geht von mir aus; Einfluss auf das Ergebnis brauche ich dafür nicht.", vs: "Beteiligung" },
     { w: "Beteiligung", d: "Meine Stimme wirkt auf das Ergebnis. Ich kann mitentscheiden, auch wenn ich beim Vollzug gar nicht dabei bin.", vs: ["Teilnehmen", "Einbezogen werden"] },
@@ -882,30 +890,31 @@ const NEEDS = [
   ]},
   { id: "unterstuetzung", bereich: B2, name: "Unterstützung & Mitgefühl", sub: "Wenn es schwer ist", accent: "#9E4A3A", accentD: "#DB8C7C", items: [
     { w: "Anteilnahme", d: "Jemand interessiert sich dafür, was mich beschäftigt, und fragt nach.", vs: "Mitgefühl" },
-    { w: "Mitgefühl", d: "Jemand fühlt mit mir und ist von meinem Schmerz selbst berührt, statt Ratschläge zu geben.", vs: "Anteilnahme" },
+    { w: "Mitgefühl", d: "Jemand ist von meinem Schmerz selbst berührt und bleibt bei mir, statt Ratschläge zu geben.", vs: "Anteilnahme" },
     { w: "Trost", d: "Jemand ist da, während es weh tut, und macht es dadurch ein wenig leichter." },
     { w: "Unterstützung", d: "Jemand hilft mir konkret und nimmt mir etwas ab. Ich empfange, ein anderer gibt.", vs: "Beitragen" },
     { w: "Fürsorge", d: "Jemand kümmert sich umfassend um mein Wohl und denkt mit, was ich brauche." }
   ]},
-  { id: "umgang", bereich: B2, name: "Umgang miteinander", sub: "Qualität der Beziehung", accent: "#8C4A6B", accentD: "#CC8FAF", items: [
+  { id: "umgang", bereich: B2, name: "Umgang miteinander", sub: "Qualität der Beziehung", accent: "#8C4A6B", accentD: "#CC8FAF",
+    note: "Keine Leiter. Wohlwollen ist ein Vorschuss, bevor überhaupt etwas geschehen ist; Güte ist Nachsicht dort, wo man streng sein könnte. Toleranz gilt allen, Wohlwollen mir persönlich.", items: [
     { w: "Rücksichtnahme", d: "Andere bedenken meine Lage mit, bevor sie handeln. Niemand plant einfach über mich hinweg." },
     { w: "Partnerschaftlicher Umgang", d: "Wir begegnen uns auf Augenhöhe, niemand bestimmt über den Kopf des anderen hinweg." },
-    { w: "Toleranz", d: "Unterschiede zwischen Menschen werden ausgehalten, auch wenn man sie nicht gut findet. Eine Haltung gegenüber allen, nicht etwas, das mir persönlich entgegengebracht wird." },
-    { w: "Wohlwollen", d: "Man ist mir von vornherein zugeneigt und legt mein Verhalten im Zweifel zu meinen Gunsten aus. Dafür muss nichts vorgefallen sein.", vs: ["Güte", "Toleranz"] },
-    { w: "Güte", d: "Ich habe etwas falsch gemacht, und jemand rechnet es mir nicht an, auch wenn er es könnte. Ohne einen Fehltritt von mir gibt es dafür keinen Anlass.", vs: "Wohlwollen" },
+    { w: "Toleranz", d: "Unterschiede werden ausgehalten, auch wenn man sie nicht mag. Eine Haltung gegenüber allen, nicht etwas, das mir persönlich entgegengebracht wird." },
+    { w: "Wohlwollen", d: "Man begegnet mir mit einem Vorschuss: von vornherein zugeneigt, und im Zweifel legt man mein Verhalten zu meinen Gunsten aus. Dafür muss nichts vorgefallen sein.", vs: ["Güte", "Toleranz"] },
+    { w: "Güte", d: "Jemand begegnet mir mild und nachsichtig, gerade dort, wo er streng sein könnte, etwa wenn mir ein Fehler passiert ist.", vs: "Wohlwollen" },
     { w: "Menschlichkeit", d: "Ich werde als Person behandelt und nicht als Fall, Funktion oder Nummer." },
     { w: "Konfliktfähigkeit", d: "Unterschiede dürfen angesprochen und ausgetragen werden, ohne dass die Beziehung daran zerbricht.", vs: "Harmonie" }
   ]},
   { id: "echtheit", bereich: B3, name: "Echtheit & Ehrlichkeit", sub: "Innen und aussen stimmen", accent: "#6A45A8", accentD: "#A98BDF",
     note: "Vorsicht beim Wort Integrität: Es heisst im Deutschen beides — moralische Geradlinigkeit und körperliche Unversehrtheit. Hier ist die erste gemeint. Die zweite steht als eigenes Bedürfnis unter Sicherheit & Schutz.", items: [
     { w: "Ehrlichkeit", vs: ["Transparenz", "Offenheit"], d: "Was gesagt wird, stimmt, auch wenn es unangenehm ist. Es geht um den Wahrheitsgehalt des Gesagten, nicht um seine Vollständigkeit." },
-    { w: "Offenheit", vs: ["Ehrlichkeit"], d: "Ich möchte mich zeigen können und ein Gegenüber, das Neues gelten lässt statt sofort abzuwinken." },
+    { w: "Offenheit", vs: ["Ehrlichkeit"], d: "Mein Gegenüber ist bereit, Neues und Unbequemes anzuhören, statt sofort abzuwinken oder dichtzumachen." },
     { w: "Authentizität", d: "Innen und aussen stimmen überein; ich muss keine Rolle spielen.", vs: "Integrität" },
     { w: "Integrität", d: "Mein Handeln stimmt mit meinen Werten überein, auch wenn es mich etwas kostet. Das liegt bei mir — gemeint ist nicht die Unversehrtheit, sondern die Geradlinigkeit.", vs: ["Authentizität", "Unversehrtheit"] },
     { w: "Selbstausdruck", d: "Ich bringe nach aussen, was in mir ist — in Worten oder durch Gestalten." }
   ]},
   { id: "autonomie", bereich: B3, name: "Autonomie", sub: "Eigenständig sein", accent: "#5146A0", accentD: "#9A92DD", items: [
-    { w: "Autonomie", d: "Ich führe mein Leben nach meinen eigenen Vorstellungen. Der weiteste Begriff dieser Gruppe." },
+    { w: "Autonomie", d: "Ich führe mein Leben nach meinen eigenen Vorstellungen, im Grossen wie im Kleinen." },
     { w: "Freiheit", d: "Nichts hält mich fest, kein Zwang von aussen, ich habe Spielraum." },
     { w: "Wahlfreiheit", d: "Mir stehen mehrere Möglichkeiten offen, und ich kann auch Nein sagen.", vs: "Selbstbestimmung" },
     { w: "Selbstbestimmung", d: "Nicht nur die Frage von heute, sondern die Richtung insgesamt liegt bei mir.", vs: "Wahlfreiheit" },
@@ -914,9 +923,9 @@ const NEEDS = [
     { w: "Privatsphäre", d: "Es gibt einen Bereich, zu dem niemand sonst Zugang hat. Dort muss ich nichts teilen und nichts erklären." }
   ]},
   { id: "selbstwert", bereich: B3, name: "Selbstwert", sub: "Mein Wert", accent: "#7D3E96", accentD: "#C08AD6", items: [
-    { w: "Selbstvertrauen", d: "Ich traue mir zu, was ansteht. Es geht um meine Fähigkeiten." },
+    { w: "Selbstvertrauen", d: "Ich weiss, was ich kann, und gehe davon aus, dass ich dem, was ansteht, gewachsen bin." },
     { w: "Selbstrespekt", d: "Ich achte mich selbst und gehe nicht über meine eigenen Grenzen hinweg.", vs: "Würde" },
-    { w: "Würde", d: "Mein unantastbarer Wert als Mensch, unabhängig von Leistung. Er steht jedem zu und muss nicht verdient werden.", vs: "Selbstrespekt" }
+    { w: "Würde", d: "Ich bin als Mensch unantastbar, unabhängig von Leistung. Das steht jedem zu und muss nicht verdient werden.", vs: "Selbstrespekt" }
   ]},
   { id: "beitragen", bereich: B4, name: "Beitragen & Wirksamkeit", sub: "Etwas bewirken", accent: "#2C6FA8", accentD: "#72ADE0", items: [
     { w: "Beitragen", d: "Was ich tue, fliesst in das Leben anderer oder in ein grösseres Ganzes ein.", vs: "Unterstützung" },
@@ -931,7 +940,7 @@ const NEEDS = [
     { w: "Kreativität", d: "Ich erschaffe und gestalte etwas Eigenes, statt nur auszuführen." },
     { w: "Träume/Ziele", d: "Ich habe etwas vor Augen, auf das ich hinlebe. Es gibt eine Richtung, auf die hin ich plane." },
     { w: "Motivation", d: "Ein Antrieb bringt mich in Gang: Lust oder ein guter Grund. Fehlt er, bleibt alles liegen, obwohl ich wüsste, was zu tun wäre." },
-    { w: "Verstehen", d: "Ich will selbst begreifen, wie etwas zusammenhängt. Ich bin der, der begreift, nicht der, der verstanden wird.", vs: "Verständnis" }
+    { w: "Verstehen", d: "Ich will selbst begreifen, wie etwas zusammenhängt. Es geht um mein eigenes Durchblicken, nicht darum, dass andere mich nachvollziehen.", vs: "Verständnis" }
   ]},
   { id: "sinn", bereich: B4, name: "Sinn & Spiritualität", sub: "Über mich hinaus", accent: "#3E5B9E", accentD: "#8AA2DB", items: [
     { w: "Sinn", d: "Was ich tue oder erlebe, hat eine Bedeutung über sich hinaus. Nicht ich bin bedeutsam, sondern die Sache.", vs: "Bedeutsamkeit" },
@@ -942,13 +951,13 @@ const NEEDS = [
   ]},
   { id: "frieden", bereich: B5, name: "Frieden & Harmonie", sub: "Im Einklang", accent: "#6E7A2E", accentD: "#B7C274",
     note: "Harmonie und Konfliktfähigkeit stehen oft in Spannung. Beides sind Bedürfnisse; es hilft zu erkennen, welches gerade lauter ist.", items: [
-    { w: "Frieden", d: "Zwischen den Menschen ist kein Streit. Es geht um das Aussen.", vs: "Innerer Frieden" },
+    { w: "Frieden", d: "Zwischen mir und anderen herrscht kein Streit mehr; man verträgt sich wieder.", vs: "Innerer Frieden" },
     { w: "Innerer Frieden", d: "In mir ist kein Streit mehr: kein Groll, keine offene Rechnung mit mir selbst. Es geht um das, was in mir liegt, nicht um die Lage draussen.", vs: ["Frieden", "Gelassenheit"] },
     { w: "Harmonie", d: "Alles passt stimmig zusammen: nicht bloss konfliktfrei, sondern positiv im Einklang.", vs: "Konfliktfähigkeit" },
     { w: "Gelassenheit", d: "Was ich nicht ändern kann, soll an mir vorbeiziehen, ohne dass ich mich daran aufreibe. Eine Haltung zu dem, was von draussen kommt." }
   ]},
   { id: "lebendigkeit", bereich: B5, name: "Lebendigkeit & Spiel", sub: "Das Leben spüren", accent: "#B27A00", accentD: "#EDB84A", items: [
-    { w: "Lebendigkeit", d: "Ich möchte mein Leben intensiv erleben und nicht nur abarbeiten. Es geht um die Tiefe des Erlebens, nicht um Energie im Körper.", vs: "Lebensfreude" },
+    { w: "Lebendigkeit", d: "Ich möchte intensiv spüren, was ich tue und erfahre, statt den Tag nur abzuarbeiten. Es geht um die Tiefe des Erfahrens, nicht um Energie im Körper.", vs: "Lebensfreude" },
     { w: "Lebensfreude", d: "Das Dasein selbst stimmt mich hell, auch ohne besonderen Anlass. Keine Reaktion auf ein Ereignis, sondern eine Grundfarbe.", vs: "Lebendigkeit" },
     { w: "Spiel", d: "Ich möchte Zeit, in der nichts erreicht werden muss und ich etwas um seiner selbst willen tun darf." },
     { w: "Leichtigkeit", d: "Es geht ohne Schwere, nichts ist kompliziert oder bedeutungsschwer." }
@@ -957,7 +966,7 @@ const NEEDS = [
     note: "Feiern und Trauern gehören zusammen: Beides heisst, das Leben zu würdigen, einmal im Erfüllten, einmal im Verlorenen.", items: [
     { w: "Feiern", d: "Was gelungen oder zu Ende gegangen ist, bekommt einen Moment der Würdigung.", vs: "Trauern" },
     { w: "Trauern", d: "Ein Verlust bekommt Raum, und der Schmerz darf da sein, statt übergangen zu werden.", vs: "Feiern" },
-    { w: "Loslassen", d: "Ich gebe etwas frei, das vorbei ist oder sich nicht ändern lässt." }
+    { w: "Loslassen", d: "Ich gebe etwas frei, das vorbei ist oder nicht mehr zu ändern ist." }
   ]}
 ];
 const BEREICHE = [B1, B2, B3, B4, B5];
@@ -968,32 +977,32 @@ const BER = {};
 
 const U = {
   "Nahrung": ["Hast du gerade Hunger oder Durst?", "Brauchst du zuerst etwas zu essen, bevor es weitergeht?", "Ist dir wichtig, dass regelmässig für Essen gesorgt ist?"],
-  "Gesundheit": ["Möchtest du, dass dein Körper wieder in Ordnung kommt?", "Ist dir wichtig, gut für deinen Körper zu sorgen?", "Brauchst du Zeit, um wieder auf die Beine zu kommen?"],
+  "Gesundheit": ["Möchtest du wieder ganz auf dem Damm sein?", "Ist dir wichtig, etwas für dein Wohlbefinden zu tun?", "Brauchst du Zeit, um wieder auf die Beine zu kommen?"],
   "Bewegung": ["Möchtest du dich mal wieder richtig auspowern?", "Hältst du es schwer aus, so lange still zu sitzen?", "Brauchst du raus an die frische Luft?"],
   "Ruhe": ["Ist es dir gerade zu laut oder zu viel?", "Möchtest du eine Weile ungestört sein?", "Brauchst du eine Pause von allem, was auf dich einströmt?"],
-  "Entspannung": ["Möchtest du einfach mal abschalten?", "Ist dir wichtig, dass die Anspannung nachlässt?", "Sitzt dir die Woche noch im Nacken?"],
+  "Entspannung": ["Möchtest du einfach mal abschalten?", "Ist dir wichtig, dass sich in dir etwas lösen darf?", "Sitzt dir die Woche noch im Nacken?"],
   "Kraft": ["Fehlt dir gerade die Energie für das, was ansteht?", "Möchtest du dich wieder stark fühlen?", "Brauchst du etwas, das dich auftankt?"],
 
   "Sicherheit": ["Möchtest du ruhig schlafen können, was das angeht?", "Ist dir wichtig, dass der Boden unter dir stabil bleibt?", "Brauchst du das Gefühl, dich nicht ständig wappnen zu müssen?"],
   "Schutz": ["Möchtest du, dass sich jemand vor dich stellt?", "Ist dir wichtig, dass dir in dieser Situation nichts zustösst?", "Brauchst du jemanden, der auf dich aufpasst?"],
   "Unversehrtheit": ["Ist dir wichtig, dass deine Grenzen respektiert werden?", "Möchtest du, dass dir niemand zu nahe tritt?", "Brauchst du das Gefühl, hier heil zu bleiben, körperlich und seelisch?"],
-  "Geborgenheit": ["Möchtest du dich irgendwo fallen lassen können?", "Ist dir wichtig, dass jemand da ist, bei dem du sicher bist?", "Wünschst du dir ein Zuhause-Gefühl?"],
+  "Geborgenheit": ["Möchtest du dich irgendwo fallen lassen können?", "Ist dir wichtig, dass jemand da ist, bei dem du dich aufgehoben fühlst?", "Wünschst du dir ein Zuhause-Gefühl?"],
 
-  "Orientierung": ["Möchtest du wissen, wo es langgeht?", "Ist dir wichtig, einen Überblick zu haben?", "Brauchst du zuerst ein Bild davon, wie das Ganze zusammenhängt?"],
+  "Orientierung": ["Möchtest du sehen, wo es langgeht?", "Ist dir wichtig, einen Überblick zu haben?", "Brauchst du zuerst ein Bild davon, wie das Ganze zusammenhängt?"],
   "Klarheit": ["Möchtest du, dass eindeutig gesagt wird, was gilt?", "Ist dir wichtig, dass keine Fragen offen bleiben?", "Möchtest du, dass es nur eine Lesart gibt?"],
-  "Struktur": ["Möchtest du feste Abläufe, auf die du dich einstellen kannst?", "Ist dir wichtig, dass es eine Ordnung gibt?", "Brauchst du einen Rahmen, in dem klar ist, wer was macht?"],
+  "Struktur": ["Möchtest du feste Abläufe, auf die du dich einstellen kannst?", "Ist dir wichtig, dass es eine Ordnung gibt?", "Brauchst du einen Rahmen, in dem feststeht, wer was macht?"],
   "Transparenz": ["Möchtest du sehen, wie eine Entscheidung zustande kommt?", "Ist dir wichtig, dass nichts hinter deinem Rücken läuft?", "Brauchst du Zugang zu den Informationen, die dich betreffen?"],
   "Wissen, woran man ist": ["Möchtest du erfahren, wie die andere Person zu dir steht?", "Ist dir wichtig, dass du dir das nicht zusammenreimen musst?", "Würde es dir helfen, wenn jemand seine Haltung offen ausspricht?"],
   "Kontinuität": ["Möchtest du, dass es so weitergeht wie bisher?", "Ist dir wichtig, dass nicht ständig alles neu wird?", "Brauchst du etwas, das bleibt?"],
-  "Verbindlichkeit": ["Ist dir wichtig, dass eine Zusage auch gilt?", "Möchtest du eine klare Abmachung statt einer Absichtserklärung?", "Wünschst du dir, dass Termine eingehalten werden?"],
+  "Verbindlichkeit": ["Ist dir wichtig, dass eine Zusage auch gilt?", "Möchtest du eine feste Abmachung statt einer vagen Absicht?", "Wünschst du dir, dass ein Ja auch wirklich ein Ja ist?"],
   "Verlässlichkeit": ["Möchtest du damit rechnen können, dass es wieder so läuft?", "Hat es dich schon zu oft erwischt, dass etwas doch nicht kam?", "Brauchst du jemanden, auf den du zählen kannst?"],
   "Vertrauen": ["Möchtest du dich öffnen können, ohne dich abzusichern?", "Ist dir wichtig, dass du dem anderen glauben kannst?", "Wünschst du dir, dass es zwischen euch wieder trägt?"],
 
   "Aufmerksamkeit (Zuwendung)": ["Möchtest du, dass jemand das Handy weglegt und bei dir ist?", "Ist dir wichtig, dass sich jemand Zeit für dich nimmt?", "Wünschst du dir, dass jemand sich dir ganz zudreht?"],
   "Wahrgenommen werden": ["Möchtest du, dass man dich begrüsst, wenn du den Raum betrittst?", "Möchtest du, dass bemerkt wird, dass du da bist?", "Ist dir wichtig, dass man dich nicht übersieht?"],
-  "Gesehen werden": ["Möchtest du, dass jemand merkt, wie es dir wirklich geht?", "Ist dir wichtig, dass man hinter die Fassade schaut?", "Wünschst du dir, dass jemand dich erkennt, wie du bist?"],
+  "Gesehen werden": ["Möchtest du, dass jemand merkt, wie es dir wirklich geht?", "Ist dir wichtig, dass man hinter die Fassade schaut?", "Wünschst du dir, dass jemand weiss, wer du wirklich bist?"],
   "Gehört werden": ["Möchtest du, dass ankommt, was du sagst?", "Ist dir wichtig, dass man dich ausreden lässt?", "Hast du den Eindruck, gegen eine Wand zu reden?"],
-  "Verständnis": ["Möchtest du, dass jemand nachvollziehen kann, warum du so reagierst?", "Ist dir wichtig, dass jemand sich in deine Lage denkt, auch ohne dir zuzustimmen?", "Wünschst du dir, dass jemand deine Beweggründe hören will?"],
+  "Verständnis": ["Möchtest du, dass jemand nachvollziehen kann, warum du so reagierst?", "Ist dir wichtig, dass jemand sich in deine Lage denkt, auch ohne dir zuzustimmen?", "Wünschst du dir, dass jemand deine Beweggründe kennenlernen will?"],
   "Akzeptanz": ["Ist dir wichtig, dass deine Entscheidung stehen bleibt?", "Möchtest du, dass diese Seite von dir sein darf, auch wenn man sie seltsam findet?", "Wünschst du dir, dass man dir das nicht länger ausredet?"],
   "Angenommen sein": ["Möchtest du so willkommen sein, wie du heute bist?", "Möchtest du dich auch mit deinen schwierigen Seiten zeigen können?", "Wünschst du dir, als ganze Person zu zählen?"],
   "Anerkennung": ["Möchtest du, dass jemand sieht, was du geleistet hast?", "Ist dir wichtig, dass deine Arbeit gewürdigt wird?", "Ärgert es dich, wenn dein Beitrag als selbstverständlich genommen wird?"],
@@ -1001,15 +1010,15 @@ const U = {
 
   "Kontakt": ["Möchtest du einfach, dass jemand da ist?", "Wünschst du dir, dass sich mal jemand meldet?", "Ist es dir zu still um dich herum?"],
   "Austausch": ["Möchtest du jemanden, mit dem du deine Gedanken hin und her wenden kannst?", "Ist dir wichtig, dass es ein Gespräch wird und kein Monolog?", "Wünschst du dir, dass auch von der anderen Seite etwas kommt?"],
-  "Verbindung": ["Möchtest du spüren, dass zwischen euch etwas da ist?", "Ist dir wichtig, auch über die Distanz verbunden zu bleiben?", "Fehlt dir der Draht zu jemandem?"],
+  "Verbindung": ["Möchtest du spüren, dass zwischen euch etwas da ist?", "Ist dir wichtig, dass der Draht auch über die Distanz hält?", "Fehlt dir der Draht zu jemandem?"],
   "Nähe": ["Möchtest du jemanden ganz dicht bei dir haben?", "Wünschst du dir mehr gemeinsame Zeit auf kurze Distanz?", "Fühlt sich der Abstand gerade zu gross an?"],
-  "Wärme": ["Wünschst du dir einen freundlicheren Ton?", "Möchtest du, dass es herzlich zugeht?", "Fehlt dir etwas Menschliches im Umgang?"],
+  "Wärme": ["Wünschst du dir einen freundlicheren Ton?", "Möchtest du, dass es herzlich zugeht?", "Wünschst du dir, dass man dir mit einem Lächeln begegnet?"],
   "Intimität": ["Möchtest du jemandem zeigen können, was du sonst für dich behältst?", "Ist dir wichtig, dass ihr euch wirklich aufeinander einlasst?", "Wünschst du dir jemanden, bei dem auch das Verletzliche Platz hat?"],
   "Liebe": ["Möchtest du spüren, dass dich jemand von Herzen mag?", "Ist dir wichtig, dass jemand dich mit allem nimmt, was zu dir gehört?", "Wünschst du dir, deine Zuneigung auch zeigen zu können?"],
 
   "Dazugehören": ["Möchtest du bei dieser Runde mitten drin sein?", "Ist dir wichtig, nicht aussen vor zu stehen?", "Wünschst du dir das Gefühl, einer von ihnen zu sein?"],
   "Zugehörigkeit": ["Möchtest du irgendwo einen festen Platz haben?", "Ist dir wichtig, dass dein Platz bleibt, auch wenn du mal fehlst?", "Suchst du einen Kreis, in dem du fest eingeplant bist?"],
-  "Gemeinschaft": ["Möchtest du etwas mit anderen zusammen aufbauen?", "Ist dir wichtig, dass man sich gegenseitig hat?", "Wünschst du dir einen Alltag, den du mit anderen teilst?"],
+  "Gemeinschaft": ["Möchtest du etwas mit anderen zusammen aufbauen?", "Ist dir wichtig, dass man sich gegenseitig hat?", "Wünschst du dir einen Alltag mit anderen zusammen statt allein?"],
   "Einbezogen werden": ["Möchtest du gefragt werden, bevor entschieden wird?", "Ist dir wichtig, dass man dich dazuholt?", "Ärgert es dich, erst hinterher informiert zu werden?"],
   "Teilnehmen": ["Möchtest du dabei sein?", "Ist dir wichtig, mitzumachen statt zuzuschauen?", "Wünschst du dir, das nächste Mal mit von der Partie zu sein?"],
   "Beteiligung": ["Möchtest du mitentscheiden und nicht nur mitreden?", "Ist dir wichtig, dass deine Stimme Gewicht hat?", "Wünschst du dir Einfluss auf das Ergebnis?"],
@@ -1019,7 +1028,7 @@ const U = {
   "Mitgefühl": ["Möchtest du, dass jemand bei dir bleibt und nicht gleich Ratschläge gibt?", "Ist dir wichtig, dass jemand spürt, wie schwer das ist?", "Wünschst du dir, dass dein Schmerz gesehen wird?"],
   "Trost": ["Möchtest du, dass jemand da ist, während es weh tut?", "Wünschst du dir etwas, das es ein bisschen leichter macht?", "Brauchst du eine Schulter?"],
   "Unterstützung": ["Möchtest du, dass dir jemand etwas abnimmt?", "Ist dir wichtig, dass jemand mit anpackt?", "Wünschst du dir konkrete Hilfe und nicht nur gute Worte?"],
-  "Fürsorge": ["Möchtest du, dass sich jemand um dich kümmert?", "Ist dir wichtig, dass jemand mitdenkt, was du brauchst?", "Tut es dir gut, umsorgt zu werden?"],
+  "Fürsorge": ["Möchtest du, dass sich jemand um dich kümmert?", "Ist dir wichtig, dass jemand mitdenkt, was du brauchst?", "Tut es dir gut, wenn jemand zu dir schaut?"],
 
   "Rücksichtnahme": ["Möchtest du, dass deine Situation mitbedacht wird?", "Ist dir wichtig, dass man nicht einfach über dich hinweg plant?", "Wünschst du dir, dass jemand kurz innehält, bevor er handelt?"],
   "Partnerschaftlicher Umgang": ["Möchtest du auf Augenhöhe behandelt werden?", "Stört es dich, wenn über deinen Kopf hinweg bestimmt wird?", "Ist dir wichtig, dass ihr euch als Gleiche begegnet?"],
@@ -1030,22 +1039,22 @@ const U = {
   "Konfliktfähigkeit": ["Möchtest du, dass Unstimmigkeiten angesprochen werden dürfen?", "Ist dir wichtig, dass ihr nach einem Streit wieder zueinander findet?", "Wünschst du dir, dass man es austrägt statt es zu schlucken?"],
 
   "Ehrlichkeit": ["Möchtest du wissen, was wirklich Sache ist?", "Ist dir wichtig, dass dir jemand reinen Wein einschenkt?", "Wäre dir eine unangenehme Wahrheit lieber als eine schöne Antwort?"],
-  "Offenheit": ["Möchtest du, dass alles auf den Tisch kommt?", "Ist dir wichtig, dass man auch für Neues bereit ist?", "Wünschst du dir ein Gegenüber, das sich nicht verschliesst?"],
-  "Authentizität": ["Möchtest du dich zeigen können, ohne eine Rolle zu spielen?", "Ermüdet es dich, dich ständig anzupassen?", "Ist dir wichtig, dass hinter den Worten auch etwas steckt?"],
+  "Offenheit": ["Möchtest du, dass man dir unvoreingenommen zuhört?", "Ist dir wichtig, dass man auch für Neues bereit ist?", "Wünschst du dir ein Gegenüber, das auch Unerwartetes an sich heranlässt?"],
+  "Authentizität": ["Möchtest du dich zeigen können, ohne eine Rolle zu spielen?", "Möchtest du auftreten können, wie dir zumute ist?", "Ist dir wichtig, dass hinter den Worten auch etwas steckt?"],
   "Integrität": ["Möchtest du nach dem handeln, was dir wichtig ist?", "Ist dir wichtig, dass Worte und Taten zusammenpassen?", "Würdest du dich selbst verraten, wenn du da mitmachst?"],
   "Selbstausdruck": ["Möchtest du sagen können, was in dir vorgeht?", "Ist dir wichtig, dem eine Form zu geben, was dich bewegt?", "Wünschst du dir einen Weg, das herauszulassen?"],
 
   "Autonomie": ["Möchtest du, dass das deine Sache bleibt?", "Stört es dich, wenn jemand über dich verfügt?", "Ist dir wichtig, das auf deine Weise zu machen?"],
-  "Freiheit": ["Möchtest du mehr Spielraum?", "Fühlst du dich gerade eingeengt?", "Ist dir wichtig, dass dich nichts festhält?"],
-  "Wahlfreiheit": ["Möchtest du zwischen mehreren Möglichkeiten wählen können?", "Stört es dich, dass dir nur eine Option bleibt?", "Ist dir wichtig, auch Nein sagen zu können?"],
+  "Freiheit": ["Möchtest du mehr Spielraum?", "Fühlst du dich gerade eingeengt?", "Ist dir wichtig, dass du dich bewegen kannst, wie du willst?"],
+  "Wahlfreiheit": ["Möchtest du mehrere Möglichkeiten offen haben?", "Stört es dich, dass dir nur eine Option bleibt?", "Ist dir wichtig, auch Nein sagen zu können?"],
   "Selbstbestimmung": ["Möchtest du über deinen Weg selbst entscheiden?", "Ist dir wichtig, dass dein Leben dir gehört?", "Wünschst du dir, dass andere nicht für dich festlegen, wie es läuft?"],
   "Selbstverantwortung": ["Möchtest du die Folgen selber tragen?", "Möchtest du selbst geradestehen für das, was du entschieden hast?", "Stört es dich, wenn jemand die Folgen für dich trägt?"],
   "Selbstbehauptung": ["Möchtest du für dich einstehen können?", "Ist dir wichtig, deinen Standpunkt auch gegen Widerstand zu vertreten?", "Wünschst du dir, nicht mehr einzuknicken?"],
   "Privatsphäre": ["Möchtest du einen Bereich, in den niemand hineinschaut?", "Ist dir wichtig, dass manches bei dir bleibt?", "Brauchst du etwas, das nur dir gehört?"],
 
-  "Selbstvertrauen": ["Möchtest du dir das zutrauen können?", "Ist dir wichtig, auf deine Fähigkeiten bauen zu können?", "Wünschst du dir, weniger an dir zu zweifeln?"],
+  "Selbstvertrauen": ["Möchtest du dich dem gewachsen fühlen?", "Ist dir wichtig, auf deine Fähigkeiten bauen zu können?", "Wünschst du dir, weniger an dir zu zweifeln?"],
   "Selbstrespekt": ["Möchtest du dich selbst gut behandeln?", "Ist dir wichtig, deine eigenen Grenzen ernst zu nehmen?", "Willst du nicht länger über dich hinweggehen?"],
-  "Würde": ["Möchtest du, dass dein Wert ausser Frage steht?", "Ist dir wichtig, dass dich niemand herabsetzt?", "Verletzt dich die Art, wie mit dir umgegangen wird?"],
+  "Würde": ["Möchtest du so behandelt werden, wie es jedem Menschen zusteht?", "Ist dir wichtig, dass dich niemand herabsetzt?", "Wünschst du dir, dass man dir mit Achtung begegnet?"],
 
   "Beitragen": ["Möchtest du etwas beisteuern?", "Ist dir wichtig, dass dein Einsatz irgendwo hineinfliesst?", "Wünschst du dir, für andere nützlich zu sein?"],
   "Freude bereiten": ["Möchtest du jemanden überraschen?", "Möchtest du jemanden zum Strahlen bringen?", "Wünschst du dir, dass dein Geschenk ankommt?"],
@@ -1060,7 +1069,7 @@ const U = {
   "Motivation": ["Fehlt dir gerade der Antrieb?", "Möchtest du wieder Lust auf die Sache bekommen?", "Ist dir wichtig, einen guten Grund zu haben?"],
   "Verstehen": ["Möchtest du begreifen, wie das zusammenhängt?", "Ist dir wichtig, es selber zu durchdringen?", "Willst du wissen, warum es so gekommen ist?"],
 
-  "Sinn": ["Möchtest du, dass das Ganze einen Zweck hat?", "Ist dir wichtig, dass deine Zeit nicht vergeudet ist?", "Fragst du dich, wofür du das eigentlich tust?"],
+  "Sinn": ["Möchtest du, dass das Ganze einen Zweck hat?", "Ist dir wichtig, dass deine Mühe zu etwas gut ist?", "Fragst du dich, wofür du das eigentlich tust?"],
   "Spiritualität": ["Möchtest du dich mit etwas Grösserem verbunden fühlen?", "Ist dir wichtig, dass es mehr gibt als das Sichtbare?", "Wünschst du dir Raum für das, was dich trägt?"],
   "Hoffnung": ["Möchtest du glauben können, dass es besser wird?", "Hältst du dich gerade daran fest, dass es noch werden kann?", "Brauchst du einen Lichtblick?"],
   "Bewusstheit": ["Möchtest du mitbekommen, was in dir vorgeht?", "Ist dir wichtig, wach durch den Tag zu gehen statt im Automatikmodus?", "Wünschst du dir, präsenter zu sein?"],
@@ -1078,7 +1087,7 @@ const U = {
 
   "Feiern": ["Möchtest du den Moment festhalten, bevor der Alltag weitergeht?", "Ist dir wichtig, dass ihr das nicht einfach übergeht?", "Wünschst du dir, dass darauf angestossen wird?"],
   "Trauern": ["Möchtest du Raum für deinen Schmerz?", "Ist dir wichtig, dass du nicht sofort wieder funktionieren musst?", "Brauchst du Zeit, um den Verlust zu fühlen?"],
-  "Loslassen": ["Möchtest du das hinter dir lassen?", "Ist dir wichtig, dich nicht länger daran festzuhalten?", "Wünschst du dir, damit abschliessen zu können?"]
+  "Loslassen": ["Möchtest du dich davon lösen?", "Ist dir wichtig, dich nicht länger daran festzuhalten?", "Wünschst du dir, damit abschliessen zu können?"]
 };
 
 // --- Kernwortschatz: was man zuerst aktiv beherrschen sollte ---
@@ -1180,7 +1189,7 @@ const SCHWELLEN = [
   { g: "aerger", a: "geladen", b: "aufgebracht", art: true, q: "Staut es sich noch, oder ist es schon draussen?", ha: "staut sich", hb: "schon draussen" },
   { g: "aerger", a: "zornig", b: "wütend", art: true, q: "Geht es um ein Unrecht oder um den Moment?", ha: "um ein Unrecht", hb: "um den Moment" },
   // Angst
-  { g: "angst", a: "besorgt", b: "beunruhigt", q: "Kreist es nur im Kopf oder stört es schon deine Ruhe?", ha: "nur im Kopf", hb: "stört die Ruhe" },
+  { g: "angst", a: "besorgt", b: "beunruhigt", q: "Kreist es nur im Kopf, oder spürst du es schon im Körper?", ha: "nur im Kopf", hb: "schon im Körper" },
   { g: "angst", a: "beunruhigt", b: "ängstlich", q: "Rechnest du schon mit Gefahr und gehst vorsichtiger heran?", ha: "noch nicht", hb: "ja" },
   { g: "angst", a: "ängstlich", b: "panisch", q: "Kannst du noch klar denken?", ha: "ja", hb: "nein" },
   { g: "angst", a: "unruhig", b: "beunruhigt", art: true, q: "Könntest du sagen, wovor?", ha: "nein", hb: "ja" },
@@ -1228,7 +1237,7 @@ const SCHWELLEN = [
   { g: "unsicherheit", a: "verwirrt", b: "durcheinander", art: true, q: "Ist nur der Kopf betroffen oder auch die Gefühle?", ha: "nur der Kopf", hb: "auch die Gefühle" },
   { g: "unsicherheit", a: "zögerlich", b: "gehemmt", art: true, q: "Nimmst du dir nur Zeit, oder bremst dich etwas in dir?", ha: "nehme mir Zeit", hb: "etwas bremst" },
   // Freude
-  { g: "freude", a: "froh", b: "erfreut", art: true, q: "Gibt es einen bestimmten Anlass?", ha: "nein", hb: "ja" },
+  { g: "freude", a: "froh", b: "erfreut", art: true, q: "Hat dich gerade etwas Neues erreicht, oder geht es um einen Stand der Dinge?", ha: "um einen Stand der Dinge", hb: "gerade erreicht" },
   { g: "freude", a: "erfreut", b: "hocherfreut", art: true,
     q: "Könntest du es einem Freund am Telefon so sagen?", ha: "ja", hb: "nein, das klänge gestelzt" },
   { g: "freude", a: "heiter", b: "fröhlich", art: true, q: "Sieht man es dir an?", ha: "nein", hb: "ja" },
@@ -1311,7 +1320,7 @@ const SCHWELLEN = [
 
   // ---- Bedürfnisse: Umgang miteinander ----
   { g: "umgang", a: "Wohlwollen", b: "Güte", art: true,
-    q: "Muss erst etwas schiefgegangen sein?", ha: "nein", hb: "ja" },
+    q: "Geht es um einen Vorschuss, bevor etwas geschehen ist, oder um Nachsicht, wo man streng sein könnte?", ha: "um einen Vorschuss", hb: "um Nachsicht" },
   { g: "umgang", a: "Wohlwollen", b: "Güte", art: true,
     q: "Geht es darum, wie man dein Verhalten liest, oder darum, was es dich kostet?",
     ha: "wie man es liest", hb: "was es mich kostet" },
@@ -1667,17 +1676,6 @@ const MODES = {
     lead: "96 Bedürfnisse in 17 Gruppen und fünf Bereichen. Tippe auf ein Bedürfnis, um die Erklärung und nahe Verwandte zu sehen.",
     keys: []
   },
-  umschreiben: {
-    tab: "Umschreiben", title: "Bedürfnisse umschreiben", ph: "Bedürfnis oder Stichwort suchen", unit: ["Bedürfnis", "Bedürfnisse"], groups: NEEDS, questions: true,
-    lead: "Statt das abstrakte Wort zu nennen, fragst du nach etwas Fassbarem. Drei Umschreibungen pro Bedürfnis, als Vermutung formuliert.",
-    keys: [
-      { title: "So funktioniert es", text: "Die Frage ist eine Vermutung, kein Befund. Ein Nein bringt euch genauso weiter wie ein Ja, weil dein Gegenüber dann selbst präzisiert." },
-      { title: "Drei Bausteine", rules: [
-        ["Konkret statt abstrakt: ", "nicht „brauchst du Autonomie“, sondern eine Situation, in der es sichtbar wird."],
-        ["Als Frage, nicht als Diagnose: ", "„Möchtest du …?“, „Ist dir wichtig, dass …?“, „Brauchst du gerade …?“"],
-        ["In der Sprache des anderen: ", "so formuliert, dass dein Gegenüber es ohne Übersetzung versteht."]] }
-    ]
-  },
   enNeg: {
     tab: "EN unerfüllt", title: "Rosenbergs Liste: needs not being met", en: true, groups: EN_NEG,
     unit: ["Wort", "Wörter"], ph: "englisches oder deutsches Wort suchen",
@@ -1693,9 +1691,20 @@ const MODES = {
     unit: ["Bedürfnis", "Bedürfnisse"], ph: "englisches oder deutsches Wort suchen",
     lead: "Rosenbergs Liste von Seite 54 und 55 ist viel kürzer als die deutsche hier — zwei Drittel dieser Einträge sind deshalb Übersetzungen deutscher Bedürfnisse, für die er kein eigenes Wort führt."
   },
+  umschreiben: {
+    tab: "Umschreiben", title: "Bedürfnisse umschreiben", ph: "Bedürfnis oder Stichwort suchen", unit: ["Bedürfnis", "Bedürfnisse"], groups: NEEDS, questions: true,
+    lead: "Statt das abstrakte Wort zu nennen, fragst du nach etwas Fassbarem. Drei Umschreibungen pro Bedürfnis, als Vermutung formuliert.",
+    keys: [
+      { title: "So funktioniert es", text: "Die Frage ist eine Vermutung, kein Befund. Ein Nein bringt euch genauso weiter wie ein Ja, weil dein Gegenüber dann selbst präzisiert." },
+      { title: "Drei Bausteine", rules: [
+        ["Konkret statt abstrakt: ", "nicht „brauchst du Autonomie“, sondern eine Situation, in der es sichtbar wird."],
+        ["Als Frage, nicht als Diagnose: ", "„Möchtest du …?“, „Ist dir wichtig, dass …?“, „Brauchst du gerade …?“"],
+        ["In der Sprache des anderen: ", "so formuliert, dass dein Gegenüber es ohne Übersetzung versteht."]] }
+    ]
+  },
   trainer: {
-    tab: "Trainer", title: "Trainer", trainer: true, groups: [], keys: [], unit: ["Karte", "Karten"], ph: "",
-    lead: "Kurze Sessions statt Dauerlesen. Jede Karte, die sass, kommt später wieder; jede, die nicht sass, bald."
+    tab: "Trainer", title: "Lernkarten-Trainer", trainer: true, groups: [], keys: [], unit: ["Karte", "Karten"], ph: "",
+    lead: "Hier übst du die Wörter mit Lernkarten. Kurze Runden statt Dauerlesen: Jede Karte, die sass, kommt später wieder; jede, die nicht sass, bald."
   }
 };
 
@@ -2924,6 +2933,24 @@ function TrainerRoot() {
   };
 
   const anz = p => Object.keys(p.cards || {}).length;
+  const zuUebertragen = () => {
+    const el = document.getElementById("xfer");
+    if (!el) return;
+    el.open = true;
+    el.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
+  };
+  const lagerinfo = synced
+    ? h("div", { className: "lagerinfo", role: "note" },
+        h("p", null, h("b", null, "Dein Lernstand "), "wird mit deinem Claude-Konto gespeichert und ist auf allen deinen Geräten gleich."))
+    : h("div", { className: "lagerinfo", role: "note" },
+        h("p", null, h("b", null, "Dein Lernstand bleibt nur in diesem Browser. "),
+          "Es gibt kein Konto und keinen Server, und niemand sonst sieht deinen Fortschritt. Lern deshalb immer im selben "
+          + "Browser und nicht im privaten Fenster. Wer die Browserdaten löscht, löscht auch den Lernstand."),
+        h("p", null, h("b", null, "Gerät wechseln oder sichern: "),
+          "Unter «Lernstand übertragen» speicherst du deinen Stand als Datei und lädst ihn auf dem anderen Gerät wieder. ",
+          h("button", { className: "linkish", onClick: zuUebertragen }, "So geht’s")),
+        h("p", { className: "note tiny" }, "iPhone: Die Seite über «Teilen → Zum Home-Bildschirm» hinzufügen und von dort "
+          + "öffnen. Sonst löscht Safari den Lernstand nach etwa einer Woche ohne Besuch."));
   const bar = h("div", { className: "who-bar" },
     h("button", { className: "who-now", "aria-expanded": open, onClick: () => { setOpen(!open); setKill(null); setRen(null); } },
       h("span", { className: "who-lab" }, "Lernende"),
@@ -2963,7 +2990,8 @@ function TrainerRoot() {
             h("button", { className: "btn tiny ghost", onClick: () => setAdding(null) }, "Abbrechen")),
       h("p", { className: "note tiny" },
         "Alle lernen denselben Stoff, jede Person mit eigenem Fortschritt und eigenen Einstellungen. "
-        + "Die Liste ist kein Schutz: Jeder kann jedes Profil öffnen und zurücksetzen.")));
+        + (synced ? "" : "Alle Profile liegen nur in diesem Browser. ")
+        + "Die Liste ist kein Schutz: Jeder kann jedes Profil öffnen und zurücksetzen.")), lagerinfo);
 
   // ---------- Lernstand sichern und laden ----------
   const lernstand = () => {
@@ -3026,12 +3054,17 @@ function TrainerRoot() {
   };
 
   const transfer = h(React.Fragment, null,
-    h("details", { className: "klapp" },
+    h("details", { className: "klapp", id: "xfer" },
       h("summary", null, "Lernstand übertragen"),
-      h("p", { className: "note" }, "Dein Fortschritt liegt nur in diesem Browser. Für ein anderes Gerät "
-        + "sicherst du ihn hier als Datei und lädst ihn dort. Das geht beliebig oft und in beide Richtungen: "
-        + "Die Karten werden einzeln zusammengeführt, und der zuletzt geübte Stand gewinnt. Es geht nichts verloren, "
-        + "auch wenn du zwischendurch auf beiden Geräten gelernt hast."),
+      h("p", { className: "note" }, "Dein Fortschritt liegt nur in diesem Browser. So nimmst du ihn auf ein anderes Gerät mit:"),
+      h("ol", { className: "stufen" },
+        h("li", null, "Hier ", h("b", null, "Lernstand sichern"), " wählen. Es entsteht eine kleine Datei «gfk-lernstand-….json», "
+          + "meist im Ordner «Downloads». Auf dem Handy geht es auch direkt über «Teilen …»."),
+        h("li", null, "Die Datei aufs andere Gerät bringen, etwa per Mail an dich selbst."),
+        h("li", null, "Dort diese Seite öffnen, unter «Trainer» → «Lernstand übertragen» auf ", h("b", null, "Lernstand laden"),
+          " tippen und die Datei wählen.")),
+      h("p", { className: "note" }, "Das geht beliebig oft und in beide Richtungen. Die Karten werden einzeln zusammengeführt, "
+        + "und der zuletzt geübte Stand gewinnt. Es geht nichts verloren, auch wenn du zwischendurch auf beiden Geräten gelernt hast."),
       h("div", { className: "tools" },
         h("button", { className: "tool", onClick: sichern }, "Lernstand sichern"),
         TEILEN && h("button", { className: "tool", onClick: teilen }, "Teilen …"),
@@ -3128,7 +3161,9 @@ function App() {
 
   let lastBereich = null;
   const seg = h("div", { className: "seg", role: "group", "aria-label": "Liste wählen" },
-    Object.entries(MODES).map(([k, v]) => h("button", { key: k, "aria-pressed": mode === k, onClick: () => switchMode(k) }, v.tab)));
+    Object.entries(MODES).map(([k, v]) => h("button", { key: k, "aria-pressed": mode === k, onClick: () => switchMode(k),
+      className: v.trainer ? "seg-train" : undefined },
+      v.trainer ? h(React.Fragment, null, h("span", { className: "seg-ico", "aria-hidden": "true" }, "▶"), " " + v.tab) : v.tab)));
 
   if (M.en) {
     // Rosenbergs Originallisten. Zwei Fälle pro Eintrag: entweder es gibt das Wort

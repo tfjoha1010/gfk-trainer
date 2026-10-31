@@ -17,9 +17,9 @@ Sieben Listen und der Trainer. Die drei Wortlisten sind dreistufig geordnet: **B
 | Gefühle unerfüllt | 75 Wörter, 11 Töpfe, 5 Bereiche | Was ich fühle, wenn ein Bedürfnis nicht erfüllt ist |
 | Gefühle erfüllt | 75 Wörter, 13 Töpfe, 5 Bereiche | Was ich fühle, wenn eines erfüllt ist |
 | Bedürfnisse | 96 Wörter, 17 Töpfe, 5 Bereiche | Das, worum es unter dem Gefühl geht |
-| Umschreiben | 288 Fragen zu 96 Bedürfnissen | Nach einem Bedürfnis fragen, ohne das Wort zu benutzen |
 | EN unerfüllt / erfüllt / Bedürfnisse | 87 / 80 / 79 Einträge | Rosenbergs englische Listen, auf die deutschen verlinkt |
-| Trainer | 8 Decks | Lernkarten mit Spaced Repetition |
+| Umschreiben | 288 Fragen zu 96 Bedürfnissen | Nach einem Bedürfnis fragen, ohne das Wort zu benutzen |
+| ▶ Trainer | 8 Decks | Lernkarten mit Spaced Repetition |
 
 Die Bereiche der unerfüllten Gefühle heissen: *Anders als es sollte, Bedrohung, Zu viel, Energie weg, Ohne Halt*. Bei den erfüllten: *Energie steigt, Nach innen, Nach vorne, Ganz da, Zu anderen*. Bei den Bedürfnissen: *Körper/Sicherheit/Orientierung, Beziehung, Selbst, Entfaltung & Sinn, Lebensqualität*.
 
